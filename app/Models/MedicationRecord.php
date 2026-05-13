@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MedicationRecord extends Model
 {
-    protected $table = 'medication_records';
-
     protected $primaryKey = 'medication_id';
 
     protected $fillable = [
@@ -21,7 +19,7 @@ class MedicationRecord extends Model
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'patient_no');
+        return $this->belongsTo(Patient::class, 'patient_no', 'patient_no');
     }
 
     public function drug()

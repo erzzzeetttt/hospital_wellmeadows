@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('ward_admissions', function (Blueprint $table) {
     $table->id('admission_id');
 
-    $table->unsignedBigInteger('patient_no');
-    $table->foreign('patient_no')
-          ->references('patient_no')
-          ->on('patients');
+    $table->string('patient_no', 10);
+
+$table->foreign('patient_no')
+      ->references('patient_no')
+      ->on('patients')
+      ->cascadeOnDelete();
 
     $table->date('date_admitted');
     $table->date('expected_leave_date')->nullable();

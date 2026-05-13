@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('diagnoses', function (Blueprint $table) {
     $table->id('diagnosis_id');
 
-    $table->unsignedBigInteger('patient_no');
-    $table->foreign('patient_no')->references('patient_no')->on('patients');
+    $table->string('patient_no', 10);
+
+$table->foreign('patient_no')
+      ->references('patient_no')
+      ->on('patients')
+      ->cascadeOnDelete();
 
     $table->unsignedBigInteger('staff_no')->nullable();
     $table->foreign('staff_no')->references('staff_no')->on('staff')->nullOnDelete();

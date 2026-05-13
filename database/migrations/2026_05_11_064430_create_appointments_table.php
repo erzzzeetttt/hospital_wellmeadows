@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('appointments', function (Blueprint $table) {
     $table->id('appointment_id');
 
-    $table->unsignedBigInteger('patient_no');
-    $table->foreign('patient_no')
-          ->references('patient_no')
-          ->on('patients');
+    $table->string('patient_no', 10);
+
+$table->foreign('patient_no')
+      ->references('patient_no')
+      ->on('patients')
+      ->cascadeOnDelete();
 
     $table->date('appointment_date');
     $table->time('appointment_time');

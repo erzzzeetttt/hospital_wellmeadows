@@ -10,7 +10,12 @@ class Patient extends Model
 
     protected $primaryKey = 'patient_no';
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected $fillable = [
+        'patient_no',
         'doctor_id',
         'nextofkinid',
         'first_name',
@@ -34,6 +39,36 @@ class Patient extends Model
 
     public function appointments()
     {
-        return $this->hasMany(Appointment::class, 'patient_no');
+        return $this->hasMany(Appointment::class, 'patient_no', 'patient_no');
+    }
+
+    public function wardAdmissions()
+    {
+        return $this->hasMany(WardAdmission::class, 'patient_no', 'patient_no');
+    }
+
+    public function medicationRecords()
+    {
+        return $this->hasMany(MedicationRecord::class, 'patient_no', 'patient_no');
+    }
+
+    public function treatments()
+    {
+        return $this->hasMany(Treatment::class, 'patient_no', 'patient_no');
+    }
+
+    public function diagnoses()
+    {
+        return $this->hasMany(Diagnosis::class, 'patient_no', 'patient_no');
+    }
+
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'patient_no', 'patient_no');
+    }
+
+    public function wardAllocations()
+    {
+        return $this->hasMany(WardAllocation::class, 'patient_no', 'patient_no');
     }
 }

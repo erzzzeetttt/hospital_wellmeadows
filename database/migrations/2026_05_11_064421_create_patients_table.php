@@ -12,28 +12,29 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-    $table->id('patient_no');
 
-    $table->unsignedBigInteger('doctor_id');
-    $table->foreign('doctor_id')
-          ->references('doctor_id')
-          ->on('local_doctors');
+            $table->string('patient_no', 10)->primary();
 
-    $table->unsignedBigInteger('nextofkinid');
-    $table->foreign('nextofkinid')
-          ->references('nextofkinid')
-          ->on('next_of_kin');
+            $table->unsignedBigInteger('doctor_id');
+            $table->foreign('doctor_id')
+                  ->references('doctor_id')
+                  ->on('local_doctors');
 
-    $table->string('first_name');
-    $table->string('last_name');
-    $table->date('date_of_birth');
-    $table->string('gender');
-    $table->string('address');
-    $table->string('phone_no');
-    $table->string('marital_status')->nullable();
+            $table->unsignedBigInteger('nextofkinid');
+            $table->foreign('nextofkinid')
+                  ->references('nextofkinid')
+                  ->on('next_of_kin');
 
-    $table->timestamps();
-});
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->date('date_of_birth');
+            $table->string('gender');
+            $table->string('address');
+            $table->string('phone_no');
+            $table->string('marital_status')->nullable();
+
+            $table->timestamps();
+        });
     }
 
     /**

@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('medication_records', function (Blueprint $table) {
     $table->id('medication_id');
 
-    $table->unsignedBigInteger('patient_no');
-    $table->foreign('patient_no')
-          ->references('patient_no')
-          ->on('patients');
+    $table->string('patient_no', 10);
 
+$table->foreign('patient_no')
+      ->references('patient_no')
+      ->on('patients')
+      ->cascadeOnDelete();
+      
     $table->unsignedBigInteger('drug_id');
     $table->foreign('drug_id')
           ->references('drug_id')

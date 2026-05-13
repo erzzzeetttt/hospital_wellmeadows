@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('hospital_procedures', function (Blueprint $table) {
     $table->id('procedure_id');
 
-    $table->unsignedBigInteger('patient_no');
-    $table->foreign('patient_no')->references('patient_no')->on('patients');
+    $table->string('patient_no', 10);
+
+$table->foreign('patient_no')
+      ->references('patient_no')
+      ->on('patients')
+      ->cascadeOnDelete();
 
     $table->string('procedure_name');
     $table->text('description')->nullable();
