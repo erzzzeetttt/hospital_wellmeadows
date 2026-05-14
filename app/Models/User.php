@@ -14,13 +14,12 @@ class User extends Authenticatable
     protected $table = 'users';
 
     protected $fillable = [
-        'staff_no',
-        'role_id',
-        'name',
-        'email',
-        'phone_number',
-        'password',
-    ];
+    'role_id',
+    'name',
+    'email',
+    'phone_number',
+    'password',
+];
 
     protected $hidden = [
         'password',
@@ -37,8 +36,4 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id', 'role_id');
     }
 
-    public function staff()
-    {
-        return $this->belongsTo(Staff::class, 'staff_no', 'staff_no');
-    }
 }

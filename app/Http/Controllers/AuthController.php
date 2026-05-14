@@ -13,20 +13,18 @@ public function register(Request $request)
 {
     //validate the request
     $attrs = $request->validate([
-        'name' => 'required|string',
-        'staff_no' => 'required|string|unique:users,staff_no',
-        'role_id' => 'required|integer',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6|confirmed'
-    ]);
+    'name' => 'required|string',
+    'role_id' => 'required|integer|exists:roles,role_id',
+    'email' => 'required|email|unique:users,email',
+    'password' => 'required|min:6|confirmed'
+]);
     //create user
-    $user = User::create([
-        'name' => $attrs['name'],
-        'staff_no' => $attrs['staff_no'],
-        'role_id' => $attrs['role_id'],
-        'email' => $attrs['email'],
-        'password' => bcrypt($attrs['password']),
-    ]);
+$user = User::create([
+    'name' => $attrs['name'],
+    'role_id' => $attrs['role_id'],
+    'email' => $attrs['email'],
+    'password' => bcrypt($attrs['password']),
+]);
     //return response with token
     return response([
         'user' => $user,
