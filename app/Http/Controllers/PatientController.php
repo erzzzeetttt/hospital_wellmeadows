@@ -2,110 +2,124 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Patient;
 use App\Models\LocalDoctor;
-use App\Models\NextOfKin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
-    public function index()
-    {
-        $patients = Patient::with(['localDoctor', 'nextOfKin'])
-            ->orderBy('patientno', 'desc')
-            ->get();
-
-        return view('patients.index', compact('patients'));
-    }
-
     public function create()
     {
         $doctors = LocalDoctor::all();
-        $nextOfKins = NextOfKin::all();
 
-        return view('patients.create', compact('doctors', 'nextOfKins'));
+        $patients = DB::table('vw_patient_profile')
+            ->orderBy('patient_no', 'desc')
+            ->get();
+
+        return view('module1.patientreg', compact('doctors', 'patients'));
     }
 
     public function store(Request $request)
     {
+
         $request->validate([
-            'firstname' => 'required|max:50',
-            'lastname' => 'required|max:50',
-            'address' => 'nullable|max:150',
-            'telno' => 'nullable|max:20',
-            'dob' => 'required|date',
-            'sex' => 'required',
-            'maritalstatus' => 'nullable|max:50',
-            'doctor_id' => 'nullable|integer',
-            'nextofkinid' => 'nullable|integer',
+            'first_name' => 'required|max:100',
+            'last_name' => 'required|max:100',
+            'date_of_birth' => 'required|date',
+            'gender' => 'required',
+            'phone_no' => 'required|max:20',
+            'marital_status' => 'nullable|max:50',
+            'address' => 'required|max:255',
+            'doctor_id' => 'required|exists:local_doctors,doctor_id',
+
+            'kin_fullname' => 'required|max:150',
+            'relationshiptopatient' => 'required|max:100',
+            'kin_telno' => 'required|max:20',
+            'kin_address' => 'required|max:255',
         ]);
 
         $result = DB::select(
-            "SELECT fn_register_patient(?, ?, ?, ?, ?, ?, ?, ?, ?) AS message",
+            "SELECT fn_register_patient_with_kin(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS message",
             [
-                $request->firstname,
-                $request->lastname,
+                $request->first_name,
+                $request->last_name,
+                $request->date_of_birth,
+                $request->gender,
+                $request->phone_no,
+                $request->marital_status,
                 $request->address,
-                $request->telno,
-                $request->dob,
-                $request->sex,
-                $request->maritalstatus,
-                $request->doctor_id,
-                $request->nextofkinid,
+                (int) $request->doctor_id,
+
+                $request->kin_fullname,
+                $request->relationshiptopatient,
+                $request->kin_telno,
+                $request->kin_address,
             ]
         );
 
         return redirect()
-            ->route('patients.index')
+            ->route('patients.create')
             ->with('success', $result[0]->message);
     }
+   public function edit($patient_no)
+{
+    $patient = DB::table('patients')
+        ->where('patient_no', $patient_no)
+        ->first();
 
-    public function show(string $id)
-    {
-        $patient = Patient::with(['localDoctor', 'nextOfKin'])->findOrFail($id);
-
-        return view('patients.show', compact('patient'));
+    if (!$patient) {
+        abort(404);
     }
 
-    public function edit(string $id)
-    {
-        $patient = Patient::findOrFail($id);
-        $doctors = LocalDoctor::all();
-        $nextOfKins = NextOfKin::all();
+    $nextOfKin = DB::table('next_of_kin')
+        ->where('nextofkinid', $patient->nextofkinid)
+        ->first();
 
-        return view('patients.edit', compact('patient', 'doctors', 'nextOfKins'));
-    }
+    $doctors = LocalDoctor::all();
 
-    public function update(Request $request, string $id)
-    {
-        $request->validate([
-            'address' => 'nullable|max:150',
-            'telno' => 'nullable|max:20',
-            'maritalstatus' => 'nullable|max:50',
-        ]);
+    return view('module1.editpatientinfo', compact('patient', 'nextOfKin', 'doctors'));
+}
 
-        $result = DB::select(
-            "SELECT fn_update_patient(?, ?, ?, ?) AS message",
-            [
-                $id,
-                $request->address,
-                $request->telno,
-                $request->maritalstatus,
-            ]
-        );
+public function update(Request $request, $patient_no)
+{
+    $request->validate([
+        'first_name' => 'required|max:100',
+        'last_name' => 'required|max:100',
+        'date_of_birth' => 'required|date',
+        'gender' => 'required',
+        'phone_no' => 'required|max:20',
+        'marital_status' => 'nullable|max:50',
+        'address' => 'required|max:255',
+        'doctor_id' => 'required|exists:local_doctors,doctor_id',
 
-        return redirect()
-            ->route('patients.index')
-            ->with('success', $result[0]->message);
-    }
+        'kin_fullname' => 'required|max:150',
+        'relationshiptopatient' => 'required|max:100',
+        'kin_telno' => 'required|max:20',
+        'kin_address' => 'required|max:255',
+    ]);
 
-    public function destroy(string $id)
-    {
-        Patient::findOrFail($id)->delete();
+    $result = DB::select(
+        "SELECT fn_update_patient_info(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS message",
+        [
+            $patient_no,
+            $request->first_name,
+            $request->last_name,
+            $request->date_of_birth,
+            $request->gender,
+            $request->phone_no,
+            $request->marital_status,
+            $request->address,
+            (int) $request->doctor_id,
 
-        return redirect()
-            ->route('patients.index')
-            ->with('success', 'Patient deleted successfully.');
-    }
+            $request->kin_fullname,
+            $request->relationshiptopatient,
+            $request->kin_telno,
+            $request->kin_address,
+        ]
+    );
+
+    return redirect()
+        ->route('patients.create')
+        ->with('success', $result[0]->message);
+}
 }

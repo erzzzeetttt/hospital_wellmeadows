@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('bills', function (Blueprint $table) {
     $table->id('bill_id');
 
-    $table->string('patient_no', 10);
+   $table->string('patient_no', 10);
 
-$table->foreign('patient_no')
+    $table->foreign('patient_no')
       ->references('patient_no')
       ->on('patients')
-      ->cascadeOnDelete();
+      ->onDelete('cascade');
 
     $table->date('bill_date');
     $table->decimal('total_amount', 10, 2)->default(0);

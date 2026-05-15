@@ -15,11 +15,10 @@ return new class extends Migration
     $table->id('diagnosis_id');
 
     $table->string('patient_no', 10);
-
-$table->foreign('patient_no')
+    $table->foreign('patient_no')
       ->references('patient_no')
       ->on('patients')
-      ->cascadeOnDelete();
+      ->onDelete('cascade');
 
     $table->unsignedBigInteger('staff_no')->nullable();
     $table->foreign('staff_no')->references('staff_no')->on('staff')->nullOnDelete();

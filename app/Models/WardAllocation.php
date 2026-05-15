@@ -20,7 +20,7 @@ class WardAllocation extends Model
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'patient_no', 'patient_no');
+        return $this->belongsTo(Patient::class, 'patient_no');
     }
 
     public function ward()

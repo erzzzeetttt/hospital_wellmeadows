@@ -14,12 +14,12 @@ return new class extends Migration
        Schema::create('ward_allocations', function (Blueprint $table) {
     $table->id('allocation_id');
 
-   $table->string('patient_no', 10);
+    $table->string('patient_no', 10);
 
-$table->foreign('patient_no')
+    $table->foreign('patient_no')
       ->references('patient_no')
       ->on('patients')
-      ->cascadeOnDelete();
+      ->onDelete('cascade');
 
     $table->unsignedBigInteger('ward_id');
     $table->foreign('ward_id')->references('ward_id')->on('wards');

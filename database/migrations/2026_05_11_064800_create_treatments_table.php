@@ -15,12 +15,11 @@ return new class extends Migration
     $table->id('treatment_id');
 
     $table->string('patient_no', 10);
-
-$table->foreign('patient_no')
+    $table->foreign('patient_no')
       ->references('patient_no')
       ->on('patients')
-      ->cascadeOnDelete();
-      
+      ->onDelete('cascade');
+
     $table->text('treatment_details');
     $table->date('treatment_date');
 

@@ -60,156 +60,115 @@
     </div>
 @endif
 
-            <form action="{{ route('patients.store') }}" method="POST">
-                @csrf
+            <form action="{{ route('patients.update', $patient->patient_no) }}" method="POST">
+            @csrf
+            @method('PUT')
 
                 <h4>Personal Information</h4>
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label>First Name *</label>
-                        <input type="text" name="first_name" placeholder="Enter first name">
+                        <input type="text"
+                        name="first_name"
+                        value="{{ old('first_name', $patient->first_name) }}"
+                        placeholder="Enter first name">
                     </div>
 
                     <div class="form-group">
                         <label>Last Name *</label>
-                        <input type="text" name="last_name" placeholder="Enter last name">
+                        <input type="text" name="last_name" value="{{ old('last_name', $patient->last_name) }}" placeholder="Enter last name">
                     </div>
 
                     <div class="form-group">
                         <label>Date of Birth *</label>
-                        <input type="date" name="date_of_birth">
+                        <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $patient->date_of_birth) }}">
                     </div>
 
                     <div class="form-group">
                         <label>Gender *</label>
                         <select name="gender">
                             <option value="">Select gender</option>
-                            <option>Male</option>
-                            <option>Female</option>
+                            <option {{ old('gender', $patient->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                            <option {{ old('gender', $patient->gender) == 'Female' ? 'selected' : '' }}>Female</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>Phone Number *</label>
-                        <input type="text" name="phone_no" placeholder="+63 900 000 0000">
+                        <input type="text" name="phone_no" value="{{ old('phone_no', $patient->phone_no) }}" placeholder="+63 900 000 0000">
                     </div>
 
                     <div class="form-group">
                         <label>Marital Status</label>
                         <select name="marital_status">
                             <option value="">Select status</option>
-                            <option>Single</option>
-                            <option>Married</option>
-                            <option>Widowed</option>
-                            <option>Divorced</option>
+                            <option {{ old('marital_status', $patient->marital_status) == 'Single' ? 'selected' : '' }}>Single</option>
+                            <option {{ old('marital_status', $patient->marital_status) == 'Married' ? 'selected' : '' }}>Married</option>
+                            <option {{ old('marital_status', $patient->marital_status) == 'Widowed' ? 'selected' : '' }}>Widowed</option>
+                            <option {{ old('marital_status', $patient->marital_status) == 'Divorced' ? 'selected' : '' }}>Divorced</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group full">
                     <label>Address *</label>
-                    <input type="text" name="address" placeholder="Enter complete address">
+                    <input type="text" name="address" value="{{ old('address', $patient->address) }}" placeholder="Enter complete address">
                 </div>
 
-                <h4>Doctor Assignment</h4>
+               <h4>Doctor Assignment</h4>
 
-                <div class="form-group full">
-                    <label>Local Doctor *</label>
-                    <select name="doctor_id" required>
-    <option value="">Select doctor</option>
+<div class="form-grid">
+    <div class="form-group">
+        <label>Local Doctor *</label>
+        <select name="doctor_id" required>
+            <option value="">Select doctor</option>
 
-    @foreach($doctors as $doctor)
-        <option value="{{ $doctor->doctor_id }}">
-            {{ $doctor->fullname }}
-        </option>
-    @endforeach
-</select>
-                </div>
+            @foreach($doctors as $doctor)
+                <option value="{{ $doctor->doctor_id }}"
+                    {{ old('doctor_id', $patient->doctor_id) == $doctor->doctor_id ? 'selected' : '' }}>
+                    {{ $doctor->fullname }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+                <div class="form-group">
+         <label>Status</label>
+    <input type="text" value="{{ $patient->status }}" readonly>
+</div>
+</div>
 
                 <h4>Next of Kin Information</h4>
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Full Name *</label>
-                        <input type="text" name="kin_fullname" placeholder="Emergency contact name">
+                        <input type="text" name="kin_fullname" value="{{ old('kin_fullname', $nextOfKin->fullname) }}" placeholder="Emergency contact name">
                     </div>
 
                     <div class="form-group">
                         <label>Relationship *</label>
-                        <input type="text" name="relationshiptopatient" placeholder="e.g. Mother, Father">
+                        <input type="text" name="relationshiptopatient" value="{{ old('relationshiptopatient', $nextOfKin->relationshiptopatient) }}" placeholder="e.g. Mother, Father">
                     </div>
 
                     <div class="form-group">
                         <label>Telephone *</label>
-                        <input type="text" name="kin_telno" placeholder="+63 900 000 0000">
+                        <input type="text" name="kin_telno" value="{{ old('kin_telno', $nextOfKin->telno) }}" placeholder="+63 900 000 0000">
                     </div>
 
                     <div class="form-group">
                         <label>Address *</label>
-                        <input type="text" name="kin_address" placeholder="Emergency contact address">
+                        <input type="text" name="kin_address" value="{{ old('kin_address', $nextOfKin->address) }}" placeholder="Emergency contact address">
                     </div>
                 </div>
 
                 <div class="actions">
-                    <a href="{{ route('admin.dashboard') }}" class="btn cancel">Cancel</a>
-                    <button type="submit" class="btn submit">Register Patient</button>
+                    <a href="{{ route('patients.create') }}" class="btn cancel">Cancel</a>
+                    <button type="submit" class="btn submit">Update Patient</button>
                 </div>
 
             </form>
-            <div class="records-section">
-    <div class="records-title">
-        <h3>Patient Records</h3>
-        <p>List of registered patients in Module 1</p>
-    </div>
-
-    <table class="records-table">
-        <thead>
-            <tr>
-                <th>Patient No</th>
-                <th>Patient Name</th>
-                <th>Doctor</th>
-                <th>Next of Kin</th>
-                <th>Phone</th>
-                <th>Gender</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody>
-
-@forelse($patients as $patient)
-<tr>
-    <td>{{ $patient->patient_no }}</td>
-    <td>{{ $patient->first_name }} {{ $patient->last_name }}</td>
-    <td>{{ $patient->doctor_name }}</td>
-    <td>{{ $patient->nok_name }}</td>
-    <td>{{ $patient->phone_no }}</td>
-    <td>{{ $patient->gender }}</td>
-    <td>{{ $patient->status }}</td>
-    <td>
-        <a href="{{ route('patients.edit', $patient->patient_no) }}" class="edit-btn">Edit</a>
-    </td>
-</tr>
-
-@empty
-
-<tr>
-    <td colspan="8">No patient records yet.</td>
-</tr>
-
-@endforelse
-
-</tbody>
-    </table>
-</div>
-
-        </div>
-
-    </main>
-
-</div>
-
+            
 </body>
 </html>

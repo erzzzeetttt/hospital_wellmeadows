@@ -15,11 +15,10 @@ return new class extends Migration
     $table->id('admission_id');
 
     $table->string('patient_no', 10);
-
-$table->foreign('patient_no')
-      ->references('patient_no')
-      ->on('patients')
-      ->cascadeOnDelete();
+    $table->foreign('patient_no')
+          ->references('patient_no')
+          ->on('patients')
+          ->onDelete('cascade');
 
     $table->date('date_admitted');
     $table->date('expected_leave_date')->nullable();
