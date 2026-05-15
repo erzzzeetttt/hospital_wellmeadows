@@ -8,9 +8,11 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [AuthController::class, 'user']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::get('/patients', [PatientApiController::class, 'index']);
-    Route::post('/patients', [PatientApiController::class, 'store']);
+Route::get('/user', [AuthController::class, 'user']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/patients', [PatientApiController::class, 'index']);
+Route::post('/patients', [PatientApiController::class, 'store']);
+Route::get('/patients/{patient_no}', [PatientApiController::class, 'show']);
+Route::put('/patients/{patient_no}', [PatientApiController::class, 'update']);
+Route::delete('/patients/{patient_no}', [PatientApiController::class, 'destroy']);
 });
