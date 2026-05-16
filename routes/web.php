@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\MedicationRecordController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,6 +39,22 @@ Route::get('/patients/{patient_no}/edit', [PatientController::class, 'edit'])
 Route::put('/patients/{patient_no}', [PatientController::class, 'update'])
     ->middleware('auth')
     ->name('patients.update');
+
+Route::get('/medication-records', [MedicationRecordController::class, 'index'])
+    ->middleware('auth')
+    ->name('medical-records.index');
+
+Route::post('/medical-records/store', [MedicationRecordController::class, 'store'])
+    ->middleware('auth')
+    ->name('medical-records.store');
+
+Route::get('/medical-records/{patient_no}', [MedicationRecordController::class, 'show'])
+    ->middleware('auth')
+    ->name('medical-records.show');
+
+Route::put('/medical-records/{medication_id}', [MedicationRecordController::class, 'update'])
+    ->middleware('auth')
+    ->name('medical-records.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

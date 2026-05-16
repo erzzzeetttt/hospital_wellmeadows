@@ -5,6 +5,7 @@
     <title>Register Patient | WellMeadows</title>
     <link rel="stylesheet" href="{{ asset('css/module1css/patientreg.css') }}">
 </head>
+           
 <body>
     <nav class="sub-nav">
 
@@ -12,9 +13,7 @@
         Patient Registration
     </a>
 
-    <a href="#">
-        Medical Records
-    </a>
+    <a href="{{ route('medical-records.index') }}">Medical Records</a>
 
     <a href="#">
         Ward Assignment

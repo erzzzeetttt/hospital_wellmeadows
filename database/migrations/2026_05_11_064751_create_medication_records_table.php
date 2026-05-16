@@ -16,15 +16,22 @@ return new class extends Migration
     $table->id('medication_id');
 
     $table->string('patient_no', 10);
-
     $table->foreign('patient_no')
           ->references('patient_no')
           ->on('patients')
           ->onDelete('cascade');
 
+    $table->unsignedBigInteger('drug_id');
+    $table->foreign('drug_id')
+          ->references('drug_id')
+          ->on('drugs')
+          ->onDelete('cascade');
+
     $table->string('dosage');
     $table->string('frequency');
+
     $table->date('start_date');
+
     $table->date('end_date')->nullable();
 
     $table->timestamps();

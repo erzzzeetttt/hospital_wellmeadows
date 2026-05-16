@@ -2,64 +2,103 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MedicationRecord;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MedicationRecordController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
-    {
-        //
+{
+    $patients = DB::table('patients')
+        ->orderBy('patient_no')
+        ->get();
+
+    $drugs = DB::table('drugs')
+        ->orderBy('drug_name')
+        ->get();
+
+    return view('module1.medicalrecords', compact('patients', 'drugs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {
-        //
+{
+    $request->validate([
+        'patient_no' => 'required|exists:patients,patient_no',
+        'drug_id' => 'required|exists:drugs,drug_id',
+        'dosage' => 'required|max:100',
+        'frequency' => 'required|max:100',
+        'start_date' => 'required|date',
+        'end_date' => 'nullable|date',
+    ]);
+
+    $result = DB::select(
+        "SELECT fn_add_medication_record(?, ?, ?, ?, ?, ?) AS message",
+        [
+            $request->patient_no,
+            (int) $request->drug_id,
+            $request->dosage,
+            $request->frequency,
+            $request->start_date,
+            $request->end_date,
+        ]
+    );
+
+    return redirect()
+        ->route('medical-records.index')
+        ->with('success', $result[0]->message);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(MedicationRecord $medicationRecord)
-    {
-        //
+    public function show($patient_no)
+{
+    $patients = DB::table('patients')
+        ->orderBy('patient_no')
+        ->get();
+
+    $selectedPatient = DB::table('patients')
+        ->where('patient_no', $patient_no)
+        ->first();
+
+    $drugs = DB::table('drugs')
+        ->orderBy('drug_name')
+        ->get();
+
+    $medications = DB::table('medication_records')
+        ->join('drugs', 'medication_records.drug_id', '=', 'drugs.drug_id')
+        ->where('medication_records.patient_no', $patient_no)
+        ->select('medication_records.*', 'drugs.drug_name')
+        ->orderBy('start_date', 'desc')
+        ->get();
+
+    return view('module1.medicalrecords', compact(
+        'patients',
+        'selectedPatient',
+        'drugs',
+        'medications'
+    ));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(MedicationRecord $medicationRecord)
-    {
-        //
-    }
+    public function update(Request $request, $medication_id)
+{
+    $request->validate([
+        'drug_id' => 'required|exists:drugs,drug_id',
+        'dosage' => 'required|max:100',
+        'frequency' => 'required|max:100',
+        'start_date' => 'required|date',
+        'end_date' => 'nullable|date',
+    ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, MedicationRecord $medicationRecord)
-    {
-        //
-    }
+    $result = DB::select(
+        "SELECT fn_update_medication_record(?, ?, ?, ?, ?, ?) AS message",
+        [
+            (int) $medication_id,
+            (int) $request->drug_id,
+            $request->dosage,
+            $request->frequency,
+            $request->start_date,
+            $request->end_date,
+        ]
+    );
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(MedicationRecord $medicationRecord)
-    {
-        //
+    return back()->with('success', $result[0]->message);
     }
 }

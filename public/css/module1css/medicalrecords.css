@@ -1,0 +1,495 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f7fb;
+    font-family: Arial, sans-serif;
+    color: #0f172a;
+}
+
+.header {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header h2 {
+    font-size: 20px;
+}
+
+.header p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.header a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.sub-nav {
+    height: 45px;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    gap: 10px;
+}
+
+.sub-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 5px;
+}
+
+.sub-nav a.active,
+.sub-nav a:hover {
+    background: rgba(255,255,255,0.2);
+    font-weight: bold;
+}
+
+.medical-container {
+    max-width: 1200px;
+    margin: 35px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    gap: 22px;
+}
+
+.patient-panel,
+.record-panel {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.patient-panel {
+    padding: 20px;
+}
+
+.patient-panel h3,
+.record-panel h3 {
+    font-size: 18px;
+    margin-bottom: 14px;
+}
+
+.search-box {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    margin-bottom: 14px;
+}
+
+.patient-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+}
+
+.patient-item:hover {
+    background: #eff6ff;
+    border-left-color: #2563eb;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    background: #dbeafe;
+    color: #2563eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.patient-item p {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.empty {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.record-panel {
+    overflow: hidden;
+}
+
+.record-header {
+    padding: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.record-header p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.add-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 15px;
+}
+
+.info-grid span {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.info-grid strong {
+    font-size: 14px;
+}
+
+.timeline {
+    padding: 25px 25px 10px;
+}
+
+.record-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.dot {
+    width: 32px;
+    height: 32px;
+    background: #dbeafe;
+    border-radius: 50%;
+    border: 6px solid #eff6ff;
+}
+
+.record-content {
+    flex: 1;
+}
+
+.record-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.record-top h4 {
+    font-size: 15px;
+}
+
+.record-top span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.record-content p {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #475569;
+}
+
+.record-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 12px;
+}
+
+.record-actions a {
+    color: #2563eb;
+    font-size: 13px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+@media (max-width: 900px) {
+    .medical-container {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid,
+    .vital-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal-box {
+    width: 700px;
+    max-width: 95%;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+}
+
+
+.modal-box form {
+    padding: 22px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.cancel-btn,
+.save-btn {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.save-btn {
+    background: #2563eb;
+    color: white;
+}
+.modal-box .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.modal-box .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-box .form-group label {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.modal-box .form-group input,
+.modal-box .form-group select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+}
+
+.modal-box .form-group input:focus,
+.modal-box .form-group select:focus {
+    border-color: #2563eb;
+}
+
+.modal-box .form-group.full {
+    grid-column: 1 / -1;
+}
+
+.patient-item {
+    text-decoration: none;
+    color: inherit;
+}
+
+.medication-card {
+    background: white;
+    border: 1px solid #dbeafe;
+    border-left: 5px solid #2563eb;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.medication-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.medication-card-header h4 {
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.medication-card-header p {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.medication-card-header span {
+    font-size: 13px;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.medication-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.medication-details div {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.medication-details label {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.medication-details strong {
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.section-title {
+    margin: 25px 0 15px;
+}
+
+.section-title h3 {
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.section-title p {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.placeholder-card {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 18px;
+    color: #475569;
+}
+
+.placeholder-card p {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.empty-record-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: #64748b;
+}
+
+.empty-record-state h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #0f172a;
+}
+
+.empty-record-state p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.medication-card-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.medication-card-actions a {
+    text-decoration: none;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.edit-med-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.edit-med-btn:hover {
+    background: #1d4ed8;
+}
+
+.selected-patient {
+    margin-top: 8px;
+}
+
+.selected-patient span {
+    font-size: 12px;
+    color: #64748b;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.selected-patient h4 {
+    font-size: 18px;
+    color: #0f172a;
+    font-weight: 700;
+}
