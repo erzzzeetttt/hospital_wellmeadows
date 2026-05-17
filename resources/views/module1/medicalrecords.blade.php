@@ -19,8 +19,8 @@
 <nav class="sub-nav">
     <a href="{{ route('patients.create') }}">Patient Registration</a>
     <a href="{{ route('medical-records.index') }}" class="active">Medical Records</a>
-    <a href="#">Ward Assignment</a>
-    <a href="#">Admission Tracking</a>
+    <a href="{{ route('ward-assignment.index') }}">Ward Assignment</a>
+    <a href="{{ route('admission-tracking.index') }}">Admission Tracking</a>
 </nav>
 
 <main class="medical-container">
@@ -28,7 +28,7 @@
     <section class="patient-panel">
         <h3>Patients</h3>
 
-        <input type="text" class="search-box" placeholder="Search patients...">
+       <input type="text" id="patientSearch" class="search-box" placeholder="Search patients...">
 
         <div class="patient-list">
     @forelse($patients as $patient)
@@ -366,6 +366,18 @@ function openEditMedicationModal(
 function closeEditMedicationModal() {
     document.getElementById('editMedicationModal').style.display = 'none';
 }
+</script>
+
+<script>
+document.getElementById('patientSearch').addEventListener('keyup', function () {
+    let searchValue = this.value.toLowerCase();
+    let patients = document.querySelectorAll('.patient-item');
+
+    patients.forEach(function (patient) {
+        let text = patient.innerText.toLowerCase();
+        patient.style.display = text.includes(searchValue) ? 'flex' : 'none';
+    });
+});
 </script>
 
         </body>

@@ -14,6 +14,7 @@ class WardAdmission extends Model
         'patient_no',
         'date_admitted',
         'expected_leave_date',
+        'discharge_date',
         'status',
     ];
 

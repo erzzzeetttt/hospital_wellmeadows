@@ -7,23 +7,6 @@
 </head>
            
 <body>
-    <nav class="sub-nav">
-
-    <a href="{{ route('patients.create') }}" class="active">
-        Patient Registration
-    </a>
-
-    <a href="{{ route('medical-records.index') }}">Medical Records</a>
-
-    <a href="#">
-        Ward Assignment
-    </a>
-
-    <a href="#">
-        Admission Tracking
-    </a>
-
-</nav>
 <div class="page">
 
     <header class="header">
@@ -34,6 +17,15 @@
 
         <a href="{{ route('admin.dashboard') }}">Back to Dashboard</a>
     </header>
+
+    <nav class="sub-nav">
+
+    <a href="{{ route('patients.create') }}" class="active">Patient Registration</a>
+    <a href="{{ route('medical-records.index') }}">Medical Records</a>
+    <a href="{{ route('ward-assignment.index') }}">Ward Assignment</a>
+    <a href="{{ route('admission-tracking.index') }}">Admission Tracking</a>
+
+</nav>
 
     <main class="container">
 

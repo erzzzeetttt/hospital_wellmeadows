@@ -6,6 +6,18 @@
     <link rel="stylesheet" href="{{ asset('css/module1css/patientreg.css') }}">
 </head>
 <body>
+
+<div class="page">
+
+    <header class="header">
+        <div>
+            <h2>WellMeadows Hospital</h2>
+            <p>Patient Management System</p>
+        </div>
+
+        <a href="{{ route('admin.dashboard') }}">Back to Dashboard</a>
+    </header>
+
     <nav class="sub-nav">
 
     <a href="{{ route('patients.create') }}" class="active">
@@ -25,16 +37,6 @@
     </a>
 
 </nav>
-<div class="page">
-
-    <header class="header">
-        <div>
-            <h2>WellMeadows Hospital</h2>
-            <p>Patient Management System</p>
-        </div>
-
-        <a href="{{ route('admin.dashboard') }}">Back to Dashboard</a>
-    </header>
 
     <main class="container">
 

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicationRecordController;
+use App\Http\Controllers\AdmissionTrackingController;
+use App\Http\Controllers\AdminDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,9 +22,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/admin/dashboard', function () {
-    return view('dashboards.admin');
-})->middleware('auth')->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('admin.dashboard');
 
 Route::get('/patients/create', [PatientController::class, 'create'])
     ->middleware('auth')
@@ -56,6 +58,22 @@ Route::put('/medical-records/{medication_id}', [MedicationRecordController::clas
     ->middleware('auth')
     ->name('medical-records.update');
 
+Route::get('/ward-assignment', function () {
+    return view('module1.wardassignment');
+})->middleware('auth')->name('ward-assignment.index');
+
+Route::get('/admission-tracking', [AdmissionTrackingController::class, 'index'])
+    ->middleware('auth')
+    ->name('admission-tracking.index');
+
+Route::post('/admission-tracking/store', [AdmissionTrackingController::class, 'store'])
+    ->middleware('auth')
+    ->name('admission-tracking.store');
+
+Route::put('/admission-tracking/{admission_id}/discharge', [AdmissionTrackingController::class, 'discharge'])
+    ->middleware('auth')
+    ->name('admission-tracking.discharge');
+ 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -74,13 +74,13 @@
 
                 <div class="card">
                     <span>Total Users</span>
-                    <h2>0</h2>
+                    <h2>{{ $totalUsers }}</h2>
                     <p>Registered system users</p>
                 </div>
 
                 <div class="card">
                     <span>Total Patients</span>
-                    <h2>0</h2>
+                    <h2>{{ $totalPatients }}</h2>
                     <p>Hospital patient records</p>
                 </div>
 
@@ -94,81 +94,6 @@
                     <span>Available Beds</span>
                     <h2>0</h2>
                     <p>Ready for allocation</p>
-                </div>
-
-            </section>
-
-            <section class="panels">
-
-                <div class="panel">
-                    <h3>User Role Distribution</h3>
-
-                    <div class="role-row">
-                        <div>
-                            <span>Administrator</span>
-                            <small>1 / 3</small>
-                        </div>
-
-                        <div class="bar">
-                            <span style="width: 33%;"></span>
-                        </div>
-                    </div>
-
-                    <div class="role-row">
-                        <div>
-                            <span>Receptionist</span>
-                            <small>1 / 3</small>
-                        </div>
-
-                        <div class="bar">
-                            <span class="green-bar" style="width: 33%;"></span>
-                        </div>
-                    </div>
-
-                    <div class="role-row">
-                        <div>
-                            <span>Charge Nurse</span>
-                            <small>1 / 3</small>
-                        </div>
-
-                        <div class="bar">
-                            <span class="purple-bar" style="width: 33%;"></span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="panel">
-
-                    <h3>Recent System Activity</h3>
-
-                    <div class="activity">
-                        <span class="dot"></span>
-
-                        <div>
-                            <b>New user registered</b>
-                            <p>System activity recorded</p>
-                        </div>
-                    </div>
-
-                    <div class="activity">
-                        <span class="dot blue"></span>
-
-                        <div>
-                            <b>Ward management updated</b>
-                            <p>Administrator action logged</p>
-                        </div>
-                    </div>
-
-                    <div class="activity">
-                        <span class="dot orange-dot"></span>
-
-                        <div>
-                            <b>Active login session</b>
-                            <p>{{ $name }} is currently online</p>
-                        </div>
-                    </div>
-
                 </div>
 
             </section>

@@ -22,6 +22,7 @@ return new class extends Migration
 
     $table->date('date_admitted');
     $table->date('expected_leave_date')->nullable();
+    $table->date('discharge_date')->nullable();
     $table->string('status')->default('Admitted');
 
     $table->timestamps();
