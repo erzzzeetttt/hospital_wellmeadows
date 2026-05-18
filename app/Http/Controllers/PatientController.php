@@ -38,28 +38,60 @@ class PatientController extends Controller
             'kin_address' => 'required|max:255',
         ]);
 
-        $result = DB::select(
-            "SELECT fn_register_patient_with_kin(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS message",
-            [
-                $request->first_name,
-                $request->last_name,
-                $request->date_of_birth,
-                $request->gender,
-                $request->phone_no,
-                $request->marital_status,
-                $request->address,
-                (int) $request->doctor_id,
-
-                $request->kin_fullname,
-                $request->relationshiptopatient,
-                $request->kin_telno,
-                $request->kin_address,
-            ]
+        $existing = DB::select(
+            'SELECT patient_no FROM patients WHERE first_name = ? AND last_name = ? AND CAST(date_of_birth AS TEXT) = ? AND doctor_id = CAST(? AS INTEGER)',
+            [$request->first_name, $request->last_name, $request->date_of_birth, $request->doctor_id]
         );
 
-        return redirect()
-            ->route('patients.create')
-            ->with('success', $result[0]->message);
+        if (!empty($existing)) {
+            return redirect()->back()
+                ->with('error', 'This patient is already registered under the same doctor.')
+                ->withInput();
+        }
+
+        try {
+            $result = DB::select(
+                "SELECT fn_register_patient_with_kin(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS message",
+                [
+                    $request->first_name,
+                    $request->last_name,
+                    $request->date_of_birth,
+                    $request->gender,
+                    $request->phone_no,
+                    $request->marital_status,
+                    $request->address,
+                    (int) $request->doctor_id,
+
+                    $request->kin_fullname,
+                    $request->relationshiptopatient,
+                    $request->kin_telno,
+                    $request->kin_address,
+                ]
+            );
+
+            return redirect()
+                ->route('patients.create')
+                ->with('success', $result[0]->message);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            $message = $e->getPrevious()?->getMessage() ?? $e->getMessage();
+
+            if (str_contains($e->getMessage(), 'already registered under the same doctor')) {
+                return redirect()->back()
+                    ->with('error', 'This patient is already registered under the same doctor.')
+                    ->withInput();
+            }
+
+            if (str_contains($message, 'Patient already exists with the same name and date of birth.')) {
+                return redirect()->back()->withInput()->withErrors([
+                    'duplicate' => 'A patient with this name and date of birth is already registered.',
+                ]);
+            }
+
+            return redirect()->back()->withInput()->withErrors([
+                'duplicate' => 'An unexpected database error occurred. Please try again.',
+            ]);
+        }
     }
    public function edit($patient_no)
 {

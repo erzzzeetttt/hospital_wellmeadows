@@ -9,6 +9,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicationRecordController;
 use App\Http\Controllers\AdmissionTrackingController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\StaffController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -79,6 +80,48 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// ── Module 2: Staff & Department Management ──────────────────────────────────
+Route::get('/staff', [StaffController::class, 'index'])
+    ->middleware('auth')
+    ->name('staff.index');
+
+Route::post('/staff', [StaffController::class, 'store'])
+    ->middleware('auth')
+    ->name('staff.store');
+
+Route::get('/staff/{staff_no}', [StaffController::class, 'show'])
+    ->middleware('auth')
+    ->name('staff.show');
+
+Route::get('/staff/{staff_no}/edit', [StaffController::class, 'edit'])
+    ->middleware('auth')
+    ->name('staff.edit');
+
+Route::put('/staff/{staff_no}', [StaffController::class, 'update'])
+    ->middleware('auth')
+    ->name('staff.update');
+
+Route::delete('/staff/{staff_no}', [StaffController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('staff.destroy');
+
+Route::get('/staff-ward-assignment', [StaffController::class, 'wardAssignment'])
+    ->middleware('auth')
+    ->name('staff.ward-assignment');
+
+Route::post('/staff-ward-assignment', [StaffController::class, 'storeWardAssignment'])
+    ->middleware('auth')
+    ->name('staff.ward-assignment.store');
+
+Route::get('/staff-schedule', [StaffController::class, 'schedule'])
+    ->middleware('auth')
+    ->name('staff.schedule');
+
+Route::post('/staff-rota', [StaffController::class, 'storeRota'])
+    ->middleware('auth')
+    ->name('staff.rota.store');
+// ─────────────────────────────────────────────────────────────────────────────
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');

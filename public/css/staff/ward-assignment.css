@@ -1,0 +1,100 @@
+/* ============================================================
+   ward-assignment.css — Styles for the Ward Assignment page
+   Mirrors admissiontracking.css layout from Module 1
+   ============================================================ */
+
+/* ── PAGE CONTAINER ─────────────────────────────────────── */
+.staff-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* ── TWO-COLUMN TRACKING GRID ────────────────────────────── */
+.tracking-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 22px;
+    align-items: start;
+}
+
+/* ── PANEL CARD (left & right columns) ──────────────────── */
+.panel-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h3    { font-size: 18px; margin-bottom: 5px; }
+.panel-header p     { color: #64748b; font-size: 13px; }
+
+.panel-body         { padding: 18px; }
+
+/* ── STAFF ASSIGNMENT ITEMS (left panel) ─────────────────── */
+.staff-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+    background: #ffffff;
+}
+
+.staff-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.staff-item-top h4  { font-size: 16px; }
+.staff-item-top p   { color: #64748b; font-size: 12px; margin-top: 4px; }
+
+.staff-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.staff-info label   { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; }
+.staff-info strong  { font-size: 13px; }
+
+.staff-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* ── QUICK-ASSIGN FORM (right panel) ─────────────────────── */
+.panel-body .form-group {
+    margin-bottom: 16px;
+}
+
+.panel-body .form-group:last-of-type {
+    margin-bottom: 20px;
+}
+
+.assign-full-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 1000px) {
+    .tracking-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .staff-container { padding: 0 15px; }
+    .staff-info      { grid-template-columns: repeat(2, 1fr); }
+}

@@ -34,6 +34,15 @@
                 <h3>Register New Patient</h3>
                 <p>Enter patient information to create a new record</p>
             </div>
+
+            @if (session('error'))
+                <div class="alert-error">{{ session('error') }}</div>
+            @endif
+
+            @if (session('success'))
+                <div class="alert-success">{{ session('success') }}</div>
+            @endif
+
     @if ($errors->any())
     <div style="background:#fee2e2; color:#991b1b; padding:12px 20px; margin:20px 26px; border-radius:6px;">
         <strong>Please fix these errors:</strong>
@@ -42,12 +51,6 @@
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
-    </div>
-@endif
-
-    @if (session('success'))
-    <div style="background:#dcfce7; color:#166534; padding:12px 20px; margin:20px 26px; border-radius:6px;">
-        {{ session('success') }}
     </div>
 @endif
 

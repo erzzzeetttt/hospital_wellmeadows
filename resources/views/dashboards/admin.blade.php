@@ -31,7 +31,7 @@
         <nav class="nav-tabs">
             <a href="#" class="active">Dashboard</a>
             <a href="{{ route('patients.create') }}">Patient Management</a>
-            <a href="#">Staff Management</a>
+            <a href="{{ route('staff.index') }}">Staff Management</a>
             <a href="#">Ward and Bed Management</a>
             <a href="#">Appointments and Treatments</a>
             <a href="#">Billings and Reports</a>

@@ -1,0 +1,241 @@
+/* ============================================================
+   base.css — Shared styles for ALL Module 2 pages
+   Mirrors the exact design tokens used in Module 1
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #0f172a;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.header {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header h2 { font-size: 20px; }
+
+.header p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.header a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+/* ── SUB-NAV ─────────────────────────────────────────────── */
+.sub-nav {
+    height: 45px;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    gap: 10px;
+}
+
+.sub-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+
+.sub-nav a:hover               { background: rgba(255,255,255,0.15); }
+.sub-nav a.active              { background: rgba(255,255,255,0.2); font-weight: bold; }
+
+/* ── FORM ELEMENTS (shared across all pages) ─────────────── */
+.form-group {
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #334155;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    background: white;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #0f172a;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus   { border-color: #2563eb; }
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────── */
+.btn {
+    text-decoration: none;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.btn.cancel { background: #f1f5f9; color: #334155; }
+.btn.submit { background: #2563eb; color: white;   }
+
+.primary-btn,
+.secondary-btn {
+    display: inline-block;
+    border: none;
+    border-radius: 6px;
+    padding: 11px 14px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.primary-btn   { background: #2563eb; color: white;   }
+.secondary-btn { background: #f1f5f9; color: #334155; }
+.primary-btn:hover { background: #1d4ed8; }
+
+/* ── ALERT MESSAGES ─────────────────────────────────────── */
+.alert-success {
+    background: #dcfce7;
+    color: #166534;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+/* ── BADGES ──────────────────────────────────────────────── */
+.role-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: bold;
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    height: fit-content;
+    white-space: nowrap;
+}
+
+.status-badge.active   { background: #dcfce7; color: #166534; }
+.status-badge.inactive { background: #e2e8f0; color: #334155; }
+
+/* ── EMPTY STATE ─────────────────────────────────────────── */
+.empty-note {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* ── MODAL ───────────────────────────────────────────────── */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-box {
+    width: 520px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.15);
+    animation: modalPop .2s ease;
+}
+
+.modal-header         { margin-bottom: 24px; }
+.modal-header h3      { font-size: 22px; font-weight: 700; color: #0f172a; }
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.modal-actions .secondary-btn {
+    background: #f1f5f9;
+    color: #334155;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.modal-actions .primary-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.modal-actions .primary-btn:hover { background: #1d4ed8; }
+
+@keyframes modalPop {
+    from { transform: scale(.95); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ── RESPONSIVE BASE ─────────────────────────────────────── */
+@media (max-width: 768px) {
+    .header  { padding: 0 20px; }
+    .sub-nav { padding: 0 15px; overflow-x: auto; }
+}

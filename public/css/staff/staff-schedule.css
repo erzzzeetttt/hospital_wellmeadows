@@ -1,0 +1,218 @@
+/* ============================================================
+   staff-schedule.css — Styles for the Staff Schedule page
+   Mirrors the summary-card + table pattern from admissiontracking.css
+   ============================================================ */
+
+/* ── PAGE CONTAINER ─────────────────────────────────────── */
+.staff-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* ── SUMMARY STAT CARDS ──────────────────────────────────── */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.summary-card span  { font-size: 13px; color: #64748b; }
+.summary-card h3    { font-size: 28px; margin: 8px 0 4px; }
+.summary-card p     { font-size: 12px; color: #16a34a;  }
+
+.summary-icon {
+    width: 42px;
+    height: 42px;
+    background: #dbeafe;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.summary-icon.green  { background: #dcfce7; }
+.summary-icon.yellow { background: #fef9c3; }
+.summary-icon.purple { background: #f3e8ff; }
+
+/* ── SCHEDULE TABLE PANEL ────────────────────────────────── */
+.panel-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.panel-header {
+    padding: 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h3    { font-size: 18px; margin-bottom: 5px; }
+.panel-header p     { color: #64748b; font-size: 13px; }
+
+.table-wrapper {
+    padding: 18px;
+    overflow-x: auto;
+}
+
+/* ── SCHEDULE TABLE ──────────────────────────────────────── */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #d9e2ec;
+    padding: 10px;
+    text-align: left;
+}
+
+.schedule-table th {
+    background: #f5f7fb;
+    font-weight: 600;
+}
+
+/* ── WARD SECTION (Figure 1.2 grouping) ─────────────────── */
+.ward-section {
+    border-top: 2px solid #e2e8f0;
+}
+
+.ward-section:first-of-type {
+    border-top: none;
+}
+
+.ward-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ward-title-block h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 3px;
+}
+
+.ward-tel {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.charge-nurse-block {
+    text-align: right;
+}
+
+.charge-nurse-label {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.no-charge-nurse {
+    display: inline-block;
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ── CHARGE NURSE ROW HIGHLIGHT ──────────────────────────── */
+.charge-nurse-row {
+    background: #fffbeb !important;
+}
+
+.charge-badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* ── SHIFT BADGES ────────────────────────────────────────── */
+.shift-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.shift-early { background: #dcfce7; color: #166534; }
+.shift-late  { background: #fef3c7; color: #92400e; }
+.shift-night { background: #e0e7ff; color: #3730a3; }
+
+/* ── WARD TOTAL FOOTER ROW ───────────────────────────────── */
+.ward-total-row td {
+    background: #f8fafc;
+    font-size: 12px;
+    color: #64748b;
+    padding: 10px 12px;
+    border-top: 1px solid #e2e8f0;
+    text-align: right;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 1000px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .ward-section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .charge-nurse-block  { text-align: left; }
+}
+
+@media (max-width: 768px) {
+    .staff-container { padding: 0 15px; }
+    .summary-grid    { grid-template-columns: 1fr; }
+}
+
+/* ── PRINT STYLES (window.print()) ──────────────────────── */
+@media print {
+    .header, .sub-nav, .summary-grid,
+    .modal-overlay, .primary-btn, .secondary-btn,
+    button { display: none !important; }
+
+    .staff-container { max-width: 100%; margin: 0; padding: 0; }
+    .panel-card      { border: none; box-shadow: none; }
+    .panel-header p,
+    .panel-header div:last-child { display: none; }
+    .ward-section    { page-break-inside: avoid; }
+    body             { background: white; font-size: 11px; }
+
+    .panel-header h3 {
+        font-size: 16px;
+        text-align: center;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #000;
+    }
+}
