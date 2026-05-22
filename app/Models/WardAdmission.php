@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WardAdmission extends Model
 {
@@ -18,8 +19,8 @@ class WardAdmission extends Model
         'status',
     ];
 
-    public function patient()
+    public function patient(): BelongsTo
     {
-        return $this->belongsTo(Patient::class, 'patient_no');
+        return $this->belongsTo(Patient::class, 'patient_no', 'patient_no');
     }
 }

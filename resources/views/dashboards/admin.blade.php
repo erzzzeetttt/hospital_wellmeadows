@@ -86,13 +86,13 @@
 
                 <div class="card">
                     <span>Total Wards</span>
-                    <h2>0</h2>
+                    <h2>{{ $totalWards }}</h2>
                     <p>All operational wards</p>
                 </div>
 
                 <div class="card">
                     <span>Available Beds</span>
-                    <h2>0</h2>
+                    <h2>{{ $availableBeds }}</h2>
                     <p>Ready for allocation</p>
                 </div>
 

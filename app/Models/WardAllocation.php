@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WardAllocation extends Model
 {
@@ -18,17 +19,17 @@ class WardAllocation extends Model
         'release_date',
     ];
 
-    public function patient()
+    public function patient(): BelongsTo
     {
-        return $this->belongsTo(Patient::class, 'patient_no');
+        return $this->belongsTo(Patient::class, 'patient_no', 'patient_no');
     }
 
-    public function ward()
+    public function ward(): BelongsTo
     {
         return $this->belongsTo(Ward::class, 'ward_id');
     }
 
-    public function bed()
+    public function bed(): BelongsTo
     {
         return $this->belongsTo(Bed::class, 'bed_id');
     }

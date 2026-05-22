@@ -7,6 +7,7 @@ use App\Http\Controllers\MedicationRecordController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\WardBedManagementController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -123,9 +124,17 @@ Route::post('/staff-rota', [StaffController::class, 'storeRota'])
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Module 3: Ward and Bed Management
-Route::get('/ward-bed-management', function () {
-    return view('module3.wardbedmanagement');
-})->middleware('auth')->name('ward-bed-management.index');
+Route::get('/ward-bed-management', [WardBedManagementController::class, 'index'])
+    ->middleware('auth')
+    ->name('ward-bed-management.index');
+
+Route::post('/ward-bed-management/wards', [WardBedManagementController::class, 'storeWard'])
+    ->middleware('auth')
+    ->name('ward-bed-management.wards.store');
+
+Route::post('/ward-bed-management/assign-bed', [WardBedManagementController::class, 'assignBed'])
+    ->middleware('auth')
+    ->name('ward-bed-management.assign-bed.store');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');

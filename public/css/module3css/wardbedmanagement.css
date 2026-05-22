@@ -82,6 +82,30 @@ body {
     padding: 22px 0 60px 52px;
 }
 
+.flash-message,
+.error-message {
+    border-radius: 4px;
+    margin: 18px 0 0 52px;
+    padding: 12px 16px;
+    width: 965px;
+}
+
+.flash-message {
+    background: #effcf3;
+    border: 1px solid #b9ebc8;
+    color: #007a35;
+}
+
+.error-message {
+    background: #fff1f1;
+    border: 1px solid #ffc9c9;
+    color: #b42318;
+}
+
+.error-message ul {
+    margin: 8px 0 0 18px;
+}
+
 #tab-all-wards:checked ~ .all-wards-panel,
 #tab-add-ward:checked ~ .add-ward-panel,
 #tab-assign-bed:checked ~ .assign-bed-panel,
@@ -238,6 +262,11 @@ select {
 
 input::placeholder {
     color: #94a1b4;
+}
+
+input[readonly] {
+    background: #f8fafc;
+    color: #53657c;
 }
 
 input:focus,
@@ -432,7 +461,9 @@ select:focus {
 
     .content-card,
     .form-card,
-    .availability-card {
+    .availability-card,
+    .flash-message,
+    .error-message {
         width: 100%;
     }
 
@@ -460,6 +491,11 @@ select:focus {
 
     .tab-panel {
         padding: 18px 14px 40px;
+    }
+
+    .flash-message,
+    .error-message {
+        margin: 14px;
     }
 
     .form-grid,

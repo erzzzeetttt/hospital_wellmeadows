@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Bed extends Model
 {
@@ -14,8 +16,13 @@ class Bed extends Model
         'status',
     ];
 
-    public function ward()
+    public function ward(): BelongsTo
     {
         return $this->belongsTo(Ward::class, 'ward_id');
+    }
+
+    public function activeAllocation(): HasOne
+    {
+        return $this->hasOne(WardAllocation::class, 'bed_id')->whereNull('release_date');
     }
 }
