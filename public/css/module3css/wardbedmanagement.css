@@ -1,0 +1,480 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: #f4f5f7;
+    color: #00112f;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.module-header {
+    align-items: center;
+    background: #ffffff;
+    display: flex;
+    height: 67px;
+    justify-content: space-between;
+    padding: 0 52px;
+}
+
+.module-header h1 {
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.module-header p {
+    color: #53657c;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.module-header a {
+    color: #005bff;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.module-header a:hover,
+.ward-tabs label:hover {
+    text-decoration: underline;
+}
+
+.ward-page > input {
+    left: -9999px;
+    position: absolute;
+}
+
+.ward-tabs {
+    align-items: stretch;
+    background: #1d5df6;
+    display: flex;
+    height: 38px;
+    padding-left: 52px;
+}
+
+.ward-tabs label {
+    align-items: center;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    font-size: 12px;
+    height: 38px;
+    justify-content: center;
+    min-width: 90px;
+    padding: 0 17px;
+}
+
+#tab-all-wards:checked ~ .ward-tabs label[for="tab-all-wards"],
+#tab-add-ward:checked ~ .ward-tabs label[for="tab-add-ward"],
+#tab-assign-bed:checked ~ .ward-tabs label[for="tab-assign-bed"],
+#tab-bed-availability:checked ~ .ward-tabs label[for="tab-bed-availability"] {
+    background: #ffffff;
+    color: #0045c4;
+    text-decoration: none;
+}
+
+.tab-panel {
+    display: none;
+    padding: 22px 0 60px 52px;
+}
+
+#tab-all-wards:checked ~ .all-wards-panel,
+#tab-add-ward:checked ~ .add-ward-panel,
+#tab-assign-bed:checked ~ .assign-bed-panel,
+#tab-bed-availability:checked ~ .bed-availability-panel {
+    display: block;
+}
+
+.content-card {
+    background: #ffffff;
+    border: 1px solid #dfe4ec;
+    border-radius: 3px;
+    overflow: hidden;
+    width: 965px;
+}
+
+.card-header,
+.availability-header {
+    border-bottom: 1px solid #dfe4ec;
+    padding: 17px 21px 15px;
+}
+
+.card-header h2,
+.availability-header h2 {
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.card-header p,
+.availability-header p {
+    color: #53657c;
+    font-size: 12px;
+}
+
+.card-header strong {
+    color: #1d5df6;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.wards-table,
+.beds-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.wards-table th,
+.wards-table td {
+    border-bottom: 1px solid #edf0f4;
+    padding: 13px 20px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.wards-table th {
+    background: #fafbfc;
+    color: #66768d;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.wards-table td {
+    color: #33445d;
+    line-height: 1.3;
+}
+
+.wards-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.wards-table strong {
+    color: #00112f;
+}
+
+.empty-cell,
+.empty-availability {
+    color: #78889d;
+    font-size: 12px;
+    padding: 24px 21px;
+    text-align: center;
+}
+
+.empty-availability {
+    border-top: 1px solid #f0f2f6;
+}
+
+.number {
+    color: #00112f;
+    font-weight: 700;
+}
+
+.vacant {
+    color: #009a44;
+}
+
+.occupied {
+    color: #e06b00;
+}
+
+.maintenance {
+    color: #78889d;
+}
+
+.form-card {
+    width: 965px;
+}
+
+.form-section {
+    padding: 23px 21px 20px;
+}
+
+.contact-section {
+    border-top: 1px solid #eef1f5;
+}
+
+.form-section h3 {
+    font-size: 12px;
+    margin-bottom: 17px;
+}
+
+.form-grid {
+    display: grid;
+    gap: 15px 21px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-grid label {
+    display: grid;
+    gap: 7px;
+}
+
+.form-grid span {
+    color: #00112f;
+}
+
+.form-grid em {
+    color: #e43f3f;
+    font-style: normal;
+}
+
+input,
+select {
+    background: #ffffff;
+    border: 1px solid #ccd5e1;
+    border-radius: 3px;
+    color: #00112f;
+    font: inherit;
+    height: 34px;
+    padding: 0 12px;
+    width: 100%;
+}
+
+input::placeholder {
+    color: #94a1b4;
+}
+
+input:focus,
+select:focus {
+    border-color: #1d5df6;
+    outline: 2px solid rgba(29, 93, 246, 0.12);
+}
+
+.form-actions {
+    align-items: center;
+    background: #fafbfc;
+    border-top: 1px solid #dfe4ec;
+    display: flex;
+    gap: 11px;
+    justify-content: flex-end;
+    padding: 15px 21px 13px;
+}
+
+.btn {
+    border-radius: 4px;
+    cursor: pointer;
+    font: inherit;
+    height: 34px;
+    padding: 0 15px;
+}
+
+.btn-light {
+    background: #ffffff;
+    border: 1px solid #ccd5e1;
+    color: #33445d;
+}
+
+.btn-primary {
+    background: #1d5df6;
+    border: 1px solid #1d5df6;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(4, 231px);
+    margin-bottom: 14px;
+}
+
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #dfe4ec;
+    border-radius: 3px;
+    min-height: 76px;
+    padding: 14px 18px;
+}
+
+.stat-card span {
+    color: #53657c;
+    display: block;
+    font-size: 11px;
+    margin-bottom: 7px;
+}
+
+.stat-card strong {
+    color: #1d5df6;
+    display: block;
+    font-size: 22px;
+}
+
+.stat-card.vacant-bg {
+    background: #effcf3;
+    border-color: #d9f5e2;
+}
+
+.stat-card.vacant-bg strong {
+    color: #009a44;
+}
+
+.stat-card.occupied-bg {
+    background: #fff9e9;
+    border-color: #ffe8ac;
+}
+
+.stat-card.occupied-bg strong {
+    color: #e06b00;
+}
+
+.stat-card.maintenance-bg strong {
+    color: #6d7c8f;
+}
+
+.availability-card {
+    width: 965px;
+}
+
+.availability-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 20px;
+}
+
+.ward-filter {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+}
+
+.ward-filter select {
+    height: 31px;
+    padding-right: 27px;
+    width: 101px;
+}
+
+.ward-block-title {
+    align-items: center;
+    background: #fafbfc;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: auto 1fr auto;
+    min-height: 37px;
+    padding: 0 21px;
+}
+
+.ward-block-title h3 {
+    font-size: 12px;
+}
+
+.ward-block-title p {
+    color: #53657c;
+    font-size: 11px;
+}
+
+.ward-block-title p span {
+    margin: 0 9px;
+}
+
+.ward-counts {
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.beds-table th,
+.beds-table td {
+    border-bottom: 1px solid #f0f2f6;
+    color: #53657c;
+    font-size: 11px;
+    padding: 9px 21px;
+    text-align: left;
+}
+
+.beds-table th {
+    color: #9aa5b5;
+    font-weight: 700;
+}
+
+.badge {
+    border-radius: 999px;
+    display: inline-block;
+    line-height: 19px;
+    padding: 0 9px;
+}
+
+.occupied-badge {
+    background: #fff0c6;
+    color: #d96a00;
+}
+
+.vacant-badge {
+    background: #dff9e9;
+    color: #008c3c;
+}
+
+.maintenance-badge {
+    background: #eef1f5;
+    color: #64748b;
+}
+
+@media (max-width: 1040px) {
+    .module-header {
+        padding: 0 24px;
+    }
+
+    .ward-tabs {
+        overflow-x: auto;
+        padding-left: 24px;
+    }
+
+    .tab-panel {
+        padding: 22px 24px 60px;
+    }
+
+    .content-card,
+    .form-card,
+    .availability-card {
+        width: 100%;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .module-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+        padding: 16px 20px;
+    }
+
+    .ward-tabs {
+        padding-left: 0;
+    }
+
+    .ward-tabs label {
+        min-width: 128px;
+    }
+
+    .tab-panel {
+        padding: 18px 14px 40px;
+    }
+
+    .form-grid,
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .availability-header,
+    .ward-block-title {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ward-counts {
+        flex-wrap: wrap;
+    }
+}

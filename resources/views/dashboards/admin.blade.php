@@ -32,7 +32,7 @@
             <a href="#" class="active">Dashboard</a>
             <a href="{{ route('patients.create') }}">Patient Management</a>
             <a href="{{ route('staff.index') }}">Staff Management</a>
-            <a href="#">Ward and Bed Management</a>
+            <a href="{{ route('ward-bed-management.index') }}">Ward and Bed Management</a>
             <a href="#">Appointments and Treatments</a>
             <a href="#">Billings and Reports</a>
         </nav>

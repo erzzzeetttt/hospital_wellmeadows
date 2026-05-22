@@ -1,15 +1,14 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PatientController;
-use App\Http\Controllers\MedicationRecordController;
-use App\Http\Controllers\AdmissionTrackingController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdmissionTrackingController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MedicationRecordController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -74,7 +73,7 @@ Route::post('/admission-tracking/store', [AdmissionTrackingController::class, 's
 Route::put('/admission-tracking/{admission_id}/discharge', [AdmissionTrackingController::class, 'discharge'])
     ->middleware('auth')
     ->name('admission-tracking.discharge');
- 
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -122,6 +121,11 @@ Route::post('/staff-rota', [StaffController::class, 'storeRota'])
     ->middleware('auth')
     ->name('staff.rota.store');
 // ─────────────────────────────────────────────────────────────────────────────
+
+// Module 3: Ward and Bed Management
+Route::get('/ward-bed-management', function () {
+    return view('module3.wardbedmanagement');
+})->middleware('auth')->name('ward-bed-management.index');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
