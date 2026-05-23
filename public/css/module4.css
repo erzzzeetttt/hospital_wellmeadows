@@ -1,0 +1,53 @@
+@import url("module4css/module4.css");
+
+.main-container {
+    max-width: 1600px;
+    width: 95%;
+}
+
+.main-assignment-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    gap: 32px;
+    align-items: start;
+}
+
+.staff-list-section .table-wrap {
+    overflow-x: visible;
+}
+
+.staff-table {
+    width: 100%;
+    min-width: 0;
+    table-layout: auto;
+}
+
+.staff-table th,
+.staff-table td {
+    padding: 16px;
+}
+
+.staff-table th:last-child,
+.staff-table td:last-child {
+    width: 220px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+    white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+    .main-assignment-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-list-section .table-wrap {
+        overflow-x: auto;
+    }
+}

@@ -121,6 +121,22 @@ Route::get('/staff-schedule', [StaffController::class, 'schedule'])
 Route::post('/staff-rota', [StaffController::class, 'storeRota'])
     ->middleware('auth')
     ->name('staff.rota.store');
+
+Route::get('/module4/appointments', function () {
+    return view('module4.appointment');
+})->middleware(['auth'])->name('module4.appointments');
+
+Route::get('/module4/treatment-recording', function () {
+    return view('module4.treatmentrec');
+})->middleware(['auth'])->name('module4.treatmentrec');
+
+Route::get('/module4/treatment-history', function () {
+    return view('module4.treatmenthistory');
+})->middleware(['auth'])->name('module4.treatmenthistory');
+
+Route::get('/module4/staff-assignment', function () {
+    return view('module4.staffassign');
+})->middleware(['auth'])->name('module4.staffassign');
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Module 3: Ward and Bed Management
