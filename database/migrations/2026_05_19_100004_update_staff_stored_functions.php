@@ -7,6 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        DB::unprepared('DROP FUNCTION IF EXISTS fn_add_staff(integer,character varying,character varying,date,character varying,character varying,character varying,character varying,character varying,numeric,character varying,numeric,character varying,character varying)');
+
+        DB::unprepared('DROP FUNCTION IF EXISTS fn_update_staff(character varying,integer,character varying,character varying,date,character varying,character varying,character varying,character varying,character varying,numeric,character varying,numeric,character varying,character varying)');
+
         DB::unprepared("
             CREATE OR REPLACE FUNCTION fn_add_staff(
                 p_role_id        INTEGER,

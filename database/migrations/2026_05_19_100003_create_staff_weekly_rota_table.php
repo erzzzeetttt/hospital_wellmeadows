@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('staff_weekly_rota', function (Blueprint $table) {
             $table->id('rota_id');
 
-            $table->unsignedBigInteger('staff_no');
+            $table->string('staff_no', 10);
             $table->foreign('staff_no')->references('staff_no')->on('staff')->cascadeOnDelete();
 
             $table->unsignedBigInteger('ward_id');

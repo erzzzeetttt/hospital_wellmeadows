@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Staff Management | WellMeadows</title>
-    <link rel="stylesheet" href="{{ asset('css/staff/base.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/staff/staff-registration.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/module2css/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/module2css/staff-registration.css') }}">
 </head>
 
 <body>
@@ -144,7 +144,7 @@
                         <label>Current Salary *</label>
                         <input type="number" name="salary"
                                value="{{ old('salary') }}"
-                               placeholder="0.00" step="0.01" min="0">
+                               placeholder="0.00" step="0.01" min="0" max="99999999.99">
                     </div>
 
                     <div class="form-group">
@@ -162,7 +162,7 @@
                         <label>Hours per Week</label>
                         <input type="number" name="hours_per_week"
                                value="{{ old('hours_per_week') }}"
-                               placeholder="e.g. 37.5" step="0.5" min="0">
+                               placeholder="e.g. 37.5" step="0.01" min="0" max="999.99">
                     </div>
 
                     <div class="form-group">

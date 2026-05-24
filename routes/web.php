@@ -2,11 +2,14 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdmissionTrackingController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MedicationRecordController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\TreatmentStaffController;
 use App\Http\Controllers\WardBedManagementController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -59,9 +62,10 @@ Route::put('/medical-records/{medication_id}', [MedicationRecordController::clas
     ->middleware('auth')
     ->name('medical-records.update');
 
-Route::get('/ward-assignment', function () {
-    return view('module1.wardassignment');
-})->middleware('auth')->name('ward-assignment.index');
+// Ward Assignment moved to Module 3 (ward-bed-management.assign-bed)
+// Route::get('/ward-assignment', function () {
+//     return view('module1.wardassignment');
+// })->middleware('auth')->name('ward-assignment.index');
 
 Route::get('/admission-tracking', [AdmissionTrackingController::class, 'index'])
     ->middleware('auth')
@@ -122,21 +126,28 @@ Route::post('/staff-rota', [StaffController::class, 'storeRota'])
     ->middleware('auth')
     ->name('staff.rota.store');
 
-Route::get('/module4/appointments', function () {
-    return view('module4.appointment');
-})->middleware(['auth'])->name('module4.appointments');
+// Module 4: Appointment & Treatment
+Route::get('/module4/appointments', [AppointmentController::class, 'index'])
+    ->middleware(['auth'])->name('module4.appointments');
+Route::post('/module4/appointments', [AppointmentController::class, 'store'])
+    ->middleware(['auth'])->name('module4.appointments.store');
+Route::patch('/module4/appointments/{id}/cancel', [AppointmentController::class, 'cancel'])
+    ->middleware(['auth'])->name('module4.appointments.cancel');
+Route::post('/module4/appointments/{appointment_id}/status', [AppointmentController::class, 'updateStatus'])
+    ->middleware(['auth'])->name('module4.appointments.status');
 
-Route::get('/module4/treatment-recording', function () {
-    return view('module4.treatmentrec');
-})->middleware(['auth'])->name('module4.treatmentrec');
+Route::get('/module4/treatment-recording', [TreatmentController::class, 'index'])
+    ->middleware(['auth'])->name('module4.treatmentrec');
+Route::post('/module4/treatment-recording', [TreatmentController::class, 'store'])
+    ->middleware(['auth'])->name('module4.treatmentrec.store');
 
-Route::get('/module4/treatment-history', function () {
-    return view('module4.treatmenthistory');
-})->middleware(['auth'])->name('module4.treatmenthistory');
+Route::get('/module4/treatmentrec/{id}/edit', [TreatmentController::class, 'edit'])
+    ->middleware(['auth'])->name('module4.treatmentrec.edit');
+Route::put('/module4/treatmentrec/{id}', [TreatmentController::class, 'update'])
+    ->middleware(['auth'])->name('module4.treatmentrec.update');
+Route::delete('/module4/treatment/{id}', [TreatmentController::class, 'destroy'])
+    ->middleware(['auth'])->name('module4.treatment.delete');
 
-Route::get('/module4/staff-assignment', function () {
-    return view('module4.staffassign');
-})->middleware(['auth'])->name('module4.staffassign');
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Module 3: Ward and Bed Management
@@ -144,13 +155,45 @@ Route::get('/ward-bed-management', [WardBedManagementController::class, 'index']
     ->middleware('auth')
     ->name('ward-bed-management.index');
 
+Route::get('/ward-bed-management/create', [WardBedManagementController::class, 'create'])
+    ->middleware('auth')
+    ->name('ward-bed-management.create');
+
+Route::get('/ward-bed-management/assign-bed', [WardBedManagementController::class, 'showAssignBed'])
+    ->middleware('auth')
+    ->name('ward-bed-management.assign-bed');
+
+Route::get('/ward-bed-management/bed-availability', [WardBedManagementController::class, 'bedAvailability'])
+    ->middleware('auth')
+    ->name('ward-bed-management.bed-availability');
+
 Route::post('/ward-bed-management/wards', [WardBedManagementController::class, 'storeWard'])
     ->middleware('auth')
     ->name('ward-bed-management.wards.store');
 
+Route::put('/ward-bed-management/wards/{id}', [WardBedManagementController::class, 'updateWard'])
+    ->middleware('auth')
+    ->name('ward-bed-management.wards.update');
+
+Route::delete('/ward-bed-management/wards/{id}', [WardBedManagementController::class, 'destroyWard'])
+    ->middleware('auth')
+    ->name('ward-bed-management.wards.destroy');
+
 Route::post('/ward-bed-management/assign-bed', [WardBedManagementController::class, 'assignBed'])
     ->middleware('auth')
     ->name('ward-bed-management.assign-bed.store');
+
+Route::post('/ward-bed-management/release-bed/{id}', [WardBedManagementController::class, 'releaseBed'])
+    ->middleware('auth')
+    ->name('ward-bed-management.release-bed');
+
+Route::post('/ward-bed-management/beds', [WardBedManagementController::class, 'storeBed'])
+    ->middleware('auth')
+    ->name('ward-bed-management.beds.store');
+
+Route::put('/ward-bed-management/beds/{id}/status', [WardBedManagementController::class, 'updateBedStatus'])
+    ->middleware('auth')
+    ->name('ward-bed-management.beds.status');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');

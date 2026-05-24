@@ -31,17 +31,14 @@ class MedicationRecordController extends Controller
         'end_date' => 'nullable|date',
     ]);
 
-    $result = DB::select(
-        "SELECT fn_add_medication_record(?, ?, ?, ?, ?, ?) AS message",
-        [
-            $request->patient_no,
-            (int) $request->drug_id,
-            $request->dosage,
-            $request->frequency,
-            $request->start_date,
-            $request->end_date,
-        ]
-    );
+    $result = DB::select('SELECT fn_add_medication_record(?, ?, ?, ?, ?, ?) AS message', [
+        $request->patient_no,
+        (int) $request->drug_id,
+        $request->dosage,
+        $request->frequency,
+        $request->start_date,
+        $request->end_date ?? null,
+    ]);
 
     return redirect()
         ->route('medical-records.index')

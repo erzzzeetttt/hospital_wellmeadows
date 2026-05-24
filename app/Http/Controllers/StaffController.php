@@ -15,7 +15,10 @@ class StaffController extends Controller
             ->orderBy('s.staff_no', 'desc')
             ->get();
 
-        $roles = DB::table('roles')->orderBy('role_name')->get();
+        $roles = DB::table('roles')
+            ->whereIn('role_name', ['Administrator', 'Receptionist', 'Charge Nurse'])
+            ->orderBy('role_name')
+            ->get();
 
         return view('staff.index', compact('staff', 'roles'));
     }
@@ -32,9 +35,9 @@ class StaffController extends Controller
             'phone_no'                         => 'required|max:20',
             'nin'                              => 'nullable|max:20',
             'position'                         => 'required|max:100',
-            'salary'                           => 'required|numeric|min:0',
+            'salary'                           => 'required|numeric|min:0|max:99999999.99',
             'salary_scale'                     => 'nullable|max:20',
-            'hours_per_week'                   => 'nullable|numeric|min:0',
+            'hours_per_week'                   => 'required|numeric|min:0|max:999.99',
             'contract_type'                    => 'nullable|in:Permanent,Temporary',
             'payment_type'                     => 'nullable|in:Weekly,Monthly',
             'date_registered'                  => 'nullable|date',
@@ -46,6 +49,17 @@ class StaffController extends Controller
             'experiences.*.end_date'              => 'nullable|date',
             'experiences.*.organization_name'     => 'nullable|max:150',
         ]);
+
+        $existing = DB::select(
+            'SELECT staff_no FROM staff WHERE LOWER(first_name) = LOWER(?) AND LOWER(last_name) = LOWER(?)',
+            [$request->first_name, $request->last_name]
+        );
+
+        if (!empty($existing)) {
+            return redirect()->back()
+                ->with('error', 'A staff member with the same name already exists.')
+                ->withInput();
+        }
 
         try {
             $result = DB::select(
@@ -122,7 +136,10 @@ class StaffController extends Controller
             abort(404);
         }
 
-        $roles = DB::table('roles')->orderBy('role_name')->get();
+        $roles = DB::table('roles')
+            ->whereIn('role_name', ['Administrator', 'Receptionist', 'Charge Nurse'])
+            ->orderBy('role_name')
+            ->get();
 
         $qualifications = DB::table('staff_qualifications')
             ->where('staff_no', $staff_no)
@@ -149,9 +166,9 @@ class StaffController extends Controller
             'phone_no'                         => 'required|max:20',
             'nin'                              => 'nullable|max:20',
             'position'                         => 'required|max:100',
-            'salary'                           => 'required|numeric|min:0',
+            'salary'                           => 'required|numeric|min:0|max:99999999.99',
             'salary_scale'                     => 'nullable|max:20',
-            'hours_per_week'                   => 'nullable|numeric|min:0',
+            'hours_per_week'                   => 'required|numeric|min:0|max:999.99',
             'contract_type'                    => 'nullable|in:Permanent,Temporary',
             'payment_type'                     => 'nullable|in:Weekly,Monthly',
             'date_registered'                  => 'nullable|date',
@@ -263,10 +280,9 @@ class StaffController extends Controller
     public function destroy($staff_no)
     {
         try {
-            $result = DB::select(
-                "SELECT fn_delete_staff(?) AS message",
-                [$staff_no]
-            );
+            $result = DB::select('SELECT fn_delete_staff(?) AS message', [
+                $staff_no,
+            ]);
 
             return redirect()->route('staff.index')->with('success', $result[0]->message);
         } catch (\Exception $e) {
@@ -392,15 +408,12 @@ class StaffController extends Controller
         ]);
 
         try {
-            $result = DB::select(
-                "SELECT fn_set_staff_rota(?, ?, ?, ?) AS message",
-                [
-                    $request->staff_no,
-                    (int) $request->ward_id,
-                    $request->week_start_date,
-                    $request->shift_type,
-                ]
-            );
+            $result = DB::select('SELECT fn_set_staff_rota(?, ?, ?, ?) AS message', [
+                $request->staff_no,
+                $request->ward_id,
+                $request->week_start_date,
+                $request->shift_type,
+            ]);
 
             return redirect()->route('staff.schedule')->with('success', $result[0]->message);
         } catch (\Exception $e) {

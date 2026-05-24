@@ -19,7 +19,6 @@
 <nav class="sub-nav">
     <a href="{{ route('patients.create') }}">Patient Registration</a>
     <a href="{{ route('medical-records.index') }}" class="active">Medical Records</a>
-    <a href="{{ route('ward-assignment.index') }}">Ward Assignment</a>
     <a href="{{ route('admission-tracking.index') }}">Admission Tracking</a>
 </nav>
 

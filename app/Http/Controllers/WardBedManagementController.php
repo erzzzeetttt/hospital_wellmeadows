@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bed;
-use App\Models\Patient;
-use App\Models\Staff;
 use App\Models\Ward;
 use App\Models\WardAdmission;
 use App\Models\WardAllocation;
@@ -17,53 +15,50 @@ use Illuminate\View\View;
 
 class WardBedManagementController extends Controller
 {
+    // ── READ METHODS ─────────────────────────────────────────────────────────
+
     /**
-     * Load the data used by all four Module 3 tabs.
+     * All Wards page — lists every ward with live bed counts.
      */
-    public function index(Request $request): View
+    public function index(): View
     {
-        $selectedWardId = $request->integer('ward_id') ?: null;
-
-        // The Add Ward form only offers staff whose position is Charge Nurse.
-        $chargeNurses = Staff::query()
-            ->where('position', 'Charge Nurse')
-            ->orderBy('last_name')
-            ->orderBy('first_name')
-            ->get();
-
-        // Counts are loaded from the beds table so the All Wards tab always reflects the database.
         $wards = Ward::query()
             ->withCount([
                 'beds',
-                'beds as vacant_beds_count' => fn ($query) => $query->where('status', 'Available'),
-                'beds as occupied_beds_count' => fn ($query) => $query->where('status', 'Occupied'),
-                'beds as maintenance_beds_count' => fn ($query) => $query->where('status', 'Maintenance'),
+                'beds as vacant_beds_count'      => fn ($q) => $q->where('status', 'Available'),
+                'beds as occupied_beds_count'    => fn ($q) => $q->where('status', 'Occupied'),
+                'beds as maintenance_beds_count' => fn ($q) => $q->where('status', 'Maintenance'),
             ])
             ->orderBy('ward_name')
             ->get();
 
-        $availabilityWards = Ward::query()
-            ->with([
-                'beds' => fn ($query) => $query
-                    ->with(['activeAllocation.patient'])
-                    ->orderBy('bed_number'),
-            ])
+        return view('module3.index', compact('wards'));
+    }
+
+    /**
+     * Add Ward page.
+     */
+    public function create(): View
+    {
+        return view('module3.create');
+    }
+
+    /**
+     * Assign Bed page — loads all data needed for the functional assignment form.
+     */
+    public function showAssignBed(): View
+    {
+        // Ward summary cards at the top of the page.
+        $wardStats = Ward::query()
             ->withCount([
                 'beds',
-                'beds as vacant_beds_count' => fn ($query) => $query->where('status', 'Available'),
-                'beds as occupied_beds_count' => fn ($query) => $query->where('status', 'Occupied'),
-                'beds as maintenance_beds_count' => fn ($query) => $query->where('status', 'Maintenance'),
+                'beds as vacant_beds_count'   => fn ($q) => $q->where('status', 'Available'),
+                'beds as occupied_beds_count' => fn ($q) => $q->where('status', 'Occupied'),
             ])
-            ->when($selectedWardId, fn ($query) => $query->where('ward_id', $selectedWardId))
             ->orderBy('ward_name')
             ->get();
 
-        $stats = [
-            'totalBeds' => $availabilityWards->sum('beds_count'),
-            'vacantBeds' => $availabilityWards->sum('vacant_beds_count'),
-            'occupiedBeds' => $availabilityWards->sum('occupied_beds_count'),
-            'maintenanceBeds' => $availabilityWards->sum('maintenance_beds_count'),
-        ];
+        $wards = Ward::query()->orderBy('ward_name')->get();
 
         $availableBeds = Bed::query()
             ->with('ward')
@@ -72,157 +67,250 @@ class WardBedManagementController extends Controller
             ->orderBy('bed_number')
             ->get();
 
-        // The patient dropdown uses admitted patients from Module 1 and hides patients already assigned to a bed.
+        // Only admitted patients without an active bed allocation can be assigned.
         $admittedPatients = WardAdmission::query()
-            ->with(['patient.doctor'])
+            ->with('patient')
             ->where('status', 'Admitted')
             ->whereDoesntHave('patient.activeWardAllocation')
             ->orderBy('date_admitted', 'desc')
             ->get();
 
-        return view('module3.wardbedmanagement', [
-            'activeTab' => session('active_tab', $request->query('tab', 'all-wards')),
-            'admittedPatients' => $admittedPatients,
-            'availableBeds' => $availableBeds,
-            'availabilityWards' => $availabilityWards,
-            'chargeNurses' => $chargeNurses,
-            'selectedWardId' => $selectedWardId,
-            'stats' => $stats,
-            'wards' => $wards,
-        ]);
+        $recentAssignments = WardAllocation::query()
+            ->with(['patient', 'bed', 'ward'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('module3.assign-bed', compact(
+            'wardStats', 'wards', 'availableBeds', 'admittedPatients', 'recentAssignments'
+        ));
     }
 
     /**
-     * Create a ward and generate its available bed records.
+     * Bed Availability page — shows per-ward bed status with an optional ward filter.
+     */
+    public function bedAvailability(Request $request): View
+    {
+        $selectedWardId = $request->integer('ward_id') ?: null;
+
+        // $wards feeds the filter dropdown; $availabilityWards carries the bed data.
+        $wards = Ward::query()->orderBy('ward_name')->get();
+
+        $availabilityWards = Ward::query()
+            ->with([
+                'beds' => fn ($q) => $q
+                    ->with(['activeAllocation.patient'])
+                    ->orderBy('bed_number'),
+            ])
+            ->withCount([
+                'beds',
+                'beds as vacant_beds_count'      => fn ($q) => $q->where('status', 'Available'),
+                'beds as occupied_beds_count'    => fn ($q) => $q->where('status', 'Occupied'),
+                'beds as maintenance_beds_count' => fn ($q) => $q->where('status', 'Maintenance'),
+            ])
+            ->when($selectedWardId, fn ($q) => $q->where('ward_id', $selectedWardId))
+            ->orderBy('ward_name')
+            ->get();
+
+        $stats = [
+            'totalBeds'       => $availabilityWards->sum('beds_count'),
+            'vacantBeds'      => $availabilityWards->sum('vacant_beds_count'),
+            'occupiedBeds'    => $availabilityWards->sum('occupied_beds_count'),
+            'maintenanceBeds' => $availabilityWards->sum('maintenance_beds_count'),
+        ];
+
+        return view('module3.bed-availability', compact('wards', 'availabilityWards', 'stats', 'selectedWardId'));
+    }
+
+    // ── WARD WRITE METHODS ────────────────────────────────────────────────────
+
+    /**
+     * Store a new ward — calls fn_add_ward() which also creates bed records.
      */
     public function storeWard(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'ward_name' => ['required', 'string', 'max:255', 'unique:wards,ward_name'],
-            'ward_type' => ['required', 'string', 'max:255'],
-            'location' => ['required', 'string', 'max:255'],
+            'ward_name'  => ['required', 'string', 'max:255', 'unique:wards,ward_name'],
+            'ward_type'  => ['required', 'string', 'max:255'],
+            'location'   => ['required', 'string', 'max:255'],
             'total_beds' => ['required', 'integer', 'min:1', 'max:200'],
-            'charge_nurse_staff_no' => [
-                'required',
-                Rule::exists('staff', 'staff_no')->where('position', 'Charge Nurse'),
-            ],
-            'telephone_extension' => ['nullable', 'string', 'max:20'],
         ]);
 
         if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('active_tab', 'add-ward')
-                ->withErrors($validator);
+            return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $validated = $validator->validated();
+        try {
+            DB::select('SELECT fn_add_ward(?, ?, ?, ?) AS ward_id', [
+                $request->ward_name,
+                $request->ward_type,
+                $request->location,
+                (int) $request->total_beds,
+            ]);
 
-        // The selected staff member is saved as the ward's charge nurse display name.
-        $chargeNurse = Staff::query()
-            ->where('position', 'Charge Nurse')
-            ->findOrFail($validated['charge_nurse_staff_no']);
-
-        $wardData = [
-            'ward_name' => $validated['ward_name'],
-            'ward_type' => $validated['ward_type'],
-            'location' => $validated['location'],
-            'total_beds' => $validated['total_beds'],
-            'charge_nurse' => $chargeNurse->first_name.' '.$chargeNurse->last_name,
-            'telephone_extension' => $validated['telephone_extension'] ?? null,
-        ];
-
-        DB::transaction(function () use ($wardData): void {
-            $ward = Ward::create($wardData);
-
-            // Bed records are created immediately so the new ward appears in Assign Bed and Availability.
-            for ($bedNumber = 1; $bedNumber <= $ward->total_beds; $bedNumber++) {
-                Bed::create([
-                    'ward_id' => $ward->ward_id,
-                    'bed_number' => str_pad((string) $bedNumber, 2, '0', STR_PAD_LEFT),
-                    'status' => 'Available',
-                ]);
-            }
-        });
-
-        return redirect()
-            ->route('ward-bed-management.index')
-            ->with('active_tab', 'all-wards')
-            ->with('success', 'Ward created successfully.');
+            return redirect()->route('ward-bed-management.index')
+                ->with('success', 'Ward created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()
+                ->with('error', 'Could not create ward: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Assign one available bed to one admitted patient.
+     * Update an existing ward — calls fn_update_ward().
+     */
+    public function updateWard(Request $request, int $id): RedirectResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'ward_name'  => ['required', 'string', 'max:255', Rule::unique('wards', 'ward_name')->ignore($id, 'ward_id')],
+            'ward_type'  => ['required', 'string', 'max:255'],
+            'location'   => ['required', 'string', 'max:255'],
+            'total_beds' => ['required', 'integer', 'min:1', 'max:200'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        try {
+            DB::select('SELECT fn_update_ward(?, ?, ?, ?, ?) AS result', [
+                $id,
+                $request->ward_name,
+                $request->ward_type,
+                $request->location,
+                (int) $request->total_beds,
+            ]);
+
+            return redirect()->route('ward-bed-management.index')
+                ->with('success', 'Ward updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()
+                ->with('error', 'Could not update ward: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete a ward — calls fn_delete_ward().
+     */
+    public function destroyWard(int $id): RedirectResponse
+    {
+        try {
+            DB::select('SELECT fn_delete_ward(?) AS result', [$id]);
+
+            return redirect()->route('ward-bed-management.index')
+                ->with('success', 'Ward deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Could not delete ward: ' . $e->getMessage());
+        }
+    }
+
+    // ── BED ASSIGNMENT METHODS ────────────────────────────────────────────────
+
+    /**
+     * Assign a bed to an admitted patient — calls fn_assign_bed_to_patient().
      */
     public function assignBed(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
-            'ward_id' => ['required', 'exists:wards,ward_id'],
-            'bed_id' => ['required', 'exists:beds,bed_id'],
-            'patient_no' => ['required', 'exists:patients,patient_no'],
+            'ward_id'         => ['required', 'exists:wards,ward_id'],
+            'bed_id'          => ['required', 'exists:beds,bed_id'],
+            'patient_no'      => ['required', 'exists:patients,patient_no'],
             'allocation_date' => ['required', 'date'],
         ]);
 
         if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('active_tab', 'assign-bed')
-                ->withErrors($validator);
+            return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $validated = $validator->validated();
+        try {
+            DB::select('SELECT fn_assign_bed_to_patient(?, ?, ?, ?) AS result', [
+                (int) $request->ward_id,
+                (int) $request->bed_id,
+                $request->patient_no,
+                $request->allocation_date,
+            ]);
 
-        return DB::transaction(function () use ($validated): RedirectResponse {
-            $bed = Bed::query()
-                ->where('bed_id', $validated['bed_id'])
-                ->where('ward_id', $validated['ward_id'])
-                ->where('status', 'Available')
-                ->lockForUpdate()
-                ->first();
-
-            if (! $bed) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('active_tab', 'assign-bed')
-                    ->withErrors(['bed_id' => 'The selected bed is no longer available for this ward.']);
-            }
-
-            $isAdmitted = WardAdmission::query()
-                ->where('patient_no', $validated['patient_no'])
-                ->where('status', 'Admitted')
-                ->exists();
-
-            if (! $isAdmitted) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('active_tab', 'assign-bed')
-                    ->withErrors(['patient_no' => 'Only admitted patients can be assigned to a bed.']);
-            }
-
-            $hasActiveAllocation = Patient::query()
-                ->where('patient_no', $validated['patient_no'])
-                ->whereHas('activeWardAllocation')
-                ->exists();
-
-            if ($hasActiveAllocation) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('active_tab', 'assign-bed')
-                    ->withErrors(['patient_no' => 'This patient is already assigned to a bed.']);
-            }
-
-            WardAllocation::create($validated);
-
-            $bed->update(['status' => 'Occupied']);
-
-            return redirect()
-                ->route('ward-bed-management.index', ['tab' => 'bed-availability'])
+            return redirect()->route('ward-bed-management.bed-availability')
                 ->with('success', 'Bed assigned successfully.');
-        });
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()
+                ->with('error', 'Could not assign bed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Release an occupied bed — calls fn_release_bed().
+     */
+    public function releaseBed(int $id): RedirectResponse
+    {
+        try {
+            DB::select('SELECT fn_release_bed(?) AS result', [$id]);
+
+            return redirect()->route('ward-bed-management.bed-availability')
+                ->with('success', 'Bed released successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Could not release bed: ' . $e->getMessage());
+        }
+    }
+
+    // ── BED MANAGEMENT METHODS ────────────────────────────────────────────────
+
+    /**
+     * Add a single bed to a ward — calls fn_add_bed().
+     */
+    public function storeBed(Request $request): RedirectResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'ward_id'    => ['required', 'exists:wards,ward_id'],
+            'bed_number' => ['required', 'string', 'max:10'],
+            'status'     => ['nullable', 'string', 'in:Available,Occupied,Maintenance'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        try {
+            DB::select('SELECT fn_add_bed(?, ?, ?) AS bed_id', [
+                (int) $request->ward_id,
+                $request->bed_number,
+                $request->status ?? 'Available',
+            ]);
+
+            return redirect()->route('ward-bed-management.bed-availability')
+                ->with('success', 'Bed added successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()
+                ->with('error', 'Could not add bed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Update a bed's status — calls fn_update_bed_status().
+     */
+    public function updateBedStatus(Request $request, int $id): RedirectResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => ['required', 'string', 'in:Available,Occupied,Maintenance'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        try {
+            DB::select('SELECT fn_update_bed_status(?, ?) AS result', [
+                $id,
+                $request->status,
+            ]);
+
+            return redirect()->route('ward-bed-management.bed-availability')
+                ->with('success', 'Bed status updated to ' . $request->status . '.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Could not update bed status: ' . $e->getMessage());
+        }
     }
 }

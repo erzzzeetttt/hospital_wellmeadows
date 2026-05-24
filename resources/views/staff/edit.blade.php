@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Staff | WellMeadows</title>
-    <link rel="stylesheet" href="{{ asset('css/staff/base.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/staff/staff-registration.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/module2css/base.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/module2css/staff-registration.css') }}">
 </head>
 <body>
 

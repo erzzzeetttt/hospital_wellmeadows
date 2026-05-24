@@ -19,7 +19,6 @@
 <nav class="sub-nav">
     <a href="{{ route('patients.create') }}">Patient Registration</a>
     <a href="{{ route('medical-records.index') }}">Medical Records</a>
-    <a href="{{ route('ward-assignment.index') }}">Ward Assignment</a>
     <a href="{{ route('admission-tracking.index') }}" class="active">Admission Tracking</a>
 </nav>
 
@@ -33,7 +32,6 @@
                 <h3>{{ $totalAdmissions }}</h3>
                 <p>All recorded admissions</p>
             </div>
-            <div class="summary-icon">📊</div>
         </div>
 
         <div class="summary-card">
@@ -42,7 +40,6 @@
                 <h3>{{ $currentlyAdmitted }}</h3>
                 <p>Active patients</p>
             </div>
-            <div class="summary-icon green">🏥</div>
         </div>
 
         <div class="summary-card">
@@ -51,7 +48,6 @@
         <h3>{{ $pendingDischarge }}</h3>
         <p>For discharge processing</p>
                 </div>
-    <div class="summary-icon yellow">⏰</div>
 </div>
 
         <div class="summary-card">
@@ -60,7 +56,6 @@
                 <h3>{{ $recentDischargesCount }}</h3>
                 <p>Completed discharges</p>
             </div>
-            <div class="summary-icon purple">📋</div>
         </div>
 
     </section>

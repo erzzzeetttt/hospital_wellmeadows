@@ -1,0 +1,316 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f7fb;
+    font-family: Arial, sans-serif;
+    color: #0f172a;
+}
+
+.header {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header h2 {
+    font-size: 20px;
+}
+
+.header p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.header a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.sub-nav {
+    height: 45px;
+    background: #2563eb;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    gap: 10px;
+}
+
+.sub-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 5px;
+}
+
+.sub-nav a.active,
+.sub-nav a:hover {
+    background: rgba(255,255,255,0.2);
+    font-weight: bold;
+}
+
+.ward-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.ward-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.ward-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.ward-card.active {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.ward-card h3 {
+    font-size: 17px;
+    margin-bottom: 12px;
+}
+
+.ward-stat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.ward-stat span {
+    color: #64748b;
+}
+
+.danger {
+    color: #dc2626;
+}
+
+.success {
+    color: #16a34a;
+}
+
+.progress {
+    height: 7px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    margin-top: 12px;
+    overflow: hidden;
+}
+
+.progress div {
+    height: 100%;
+    background: #2563eb;
+}
+
+.ward-main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 22px;
+}
+
+.bed-layout-card,
+.assign-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 22px;
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.card-title h3,
+.assign-card h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.card-title p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.legend {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.legend i {
+    width: 9px;
+    height: 9px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+.available-dot {
+    background: #22c55e;
+}
+
+.occupied-dot {
+    background: #ef4444;
+}
+
+.maintenance-dot {
+    background: #eab308;
+}
+
+.bed-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.bed-card {
+    min-height: 95px;
+    border-radius: 8px;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+}
+
+.bed-card strong {
+    display: block;
+    margin-bottom: 12px;
+}
+
+.bed-card p {
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.bed-card small {
+    color: #64748b;
+    font-size: 11px;
+}
+
+.bed-card.available {
+    background: #dcfce7;
+    border-color: #22c55e;
+}
+
+.bed-card.occupied {
+    background: #fee2e2;
+    border-color: #ef4444;
+}
+
+.bed-card.maintenance {
+    background: #fef9c3;
+    border-color: #eab308;
+}
+
+.form-group {
+    margin-top: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.assign-btn {
+    width: 100%;
+    margin-top: 18px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.recent-section {
+    margin-top: 24px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+}
+
+.recent-section h4 {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.recent-item {
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.recent-item strong {
+    display: block;
+    font-size: 13px;
+}
+
+.recent-item span {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* Notice banner for the Module 3 migration notice */
+.notice-banner {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 22px;
+    font-size: 13px;
+    color: #1e40af;
+}
+
+.notice-banner a {
+    color: #2563eb;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+@media (max-width: 1000px) {
+    .ward-summary-grid,
+    .ward-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bed-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

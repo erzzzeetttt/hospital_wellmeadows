@@ -19,11 +19,20 @@
 <nav class="sub-nav">
     <a href="{{ route('patients.create') }}">Patient Registration</a>
     <a href="{{ route('medical-records.index') }}">Medical Records</a>
-    <a href="{{ route('ward-assignment.index') }}" class="active">Ward Assignment</a>
+
     <a href="{{ route('admission-tracking.index') }}">Admission Tracking</a>
 </nav>
 
 <main class="ward-container">
+
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 20px;margin-bottom:22px;font-size:13px;color:#1e40af;">
+        <strong>Notice:</strong> Ward Assignment has been moved to
+        <strong>Module 3 &mdash; Ward &amp; Bed Management</strong>.
+        <a href="{{ route('ward-bed-management.assign-bed') }}"
+           style="color:#2563eb;font-weight:bold;text-decoration:underline;margin-left:6px;">
+            Go to Assign Bed &rarr;
+        </a>
+    </div>
 
     <section class="ward-summary-grid">
 
