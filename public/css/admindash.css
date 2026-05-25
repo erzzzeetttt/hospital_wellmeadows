@@ -267,3 +267,60 @@ body {
     }
 
 }
+
+/* SHORTCUT GRID (role dashboards) */
+
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.shortcut-card {
+    display: block;
+    text-decoration: none;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.shortcut-card:hover {
+    border-color: #2563eb;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
+}
+
+.shortcut-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.shortcut-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.shortcut-desc {
+    font-size: 12px;
+    color: #64748b;
+}
+
+@media (max-width: 1000px) {
+    .shortcuts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .shortcuts-grid {
+        grid-template-columns: 1fr;
+    }
+}

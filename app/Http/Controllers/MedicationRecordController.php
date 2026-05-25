@@ -66,11 +66,26 @@ class MedicationRecordController extends Controller
         ->orderBy('start_date', 'desc')
         ->get();
 
+    $diagnoses = DB::select("
+        SELECT
+            d.diagnosis_id,
+            d.diagnosis_date,
+            d.diagnosis_details,
+            d.treatment_type,
+            CONCAT(s.first_name, ' ', s.last_name) AS doctor_name,
+            d.appointment_id
+        FROM diagnoses d
+        LEFT JOIN staff s ON s.staff_no::text = d.staff_no::text
+        WHERE d.patient_no = ?
+        ORDER BY d.diagnosis_date DESC
+    ", [$patient_no]);
+
     return view('module1.medicalrecords', compact(
         'patients',
         'selectedPatient',
         'drugs',
-        'medications'
+        'medications',
+        'diagnoses'
     ));
     }
 

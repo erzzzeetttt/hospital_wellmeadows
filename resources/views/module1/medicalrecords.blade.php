@@ -165,23 +165,42 @@
 
 </div>
             <div class="section-title">
-            <h3>Diagnosis Records</h3>
-    <p>
-        Diagnosis records will be available once staff module is integrated.
-    </p>
-                </div>
-
-                <div class="placeholder-card">
-    <strong>No diagnosis records yet.</strong>
-
-    <p>
-        This section is reserved for future diagnosis entries and staff integration.
-    </p>
-                    </div>
-                </div>
+                <h3>Diagnosis Records</h3>
             </div>
 
+            @isset($diagnoses)
+                @forelse($diagnoses as $diagnosis)
+                    <div class="medication-card">
+                        <div class="medication-card-header">
+                            <div>
+                                <h4>{{ $diagnosis->diagnosis_details }}</h4>
+                                <p>{{ $diagnosis->treatment_type ?? 'No treatment type' }}</p>
+                            </div>
+                            <span>{{ $diagnosis->diagnosis_date }}</span>
+                        </div>
+                        <div class="medication-details">
+                            <div>
+                                <label>Diagnosis Date</label>
+                                <strong>{{ $diagnosis->diagnosis_date }}</strong>
+                            </div>
+                            <div>
+                                <label>Treatment Type</label>
+                                <strong>{{ $diagnosis->treatment_type ?? '—' }}</strong>
+                            </div>
+                            <div>
+                                <label>Doctor</label>
+                                <strong>{{ $diagnosis->doctor_name ?? '—' }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p>No diagnosis records yet.</p>
+                @endforelse
+            @endisset
         </div>
+    </div>
+
+</div>
 
 
         </div>

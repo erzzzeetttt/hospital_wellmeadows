@@ -34,7 +34,7 @@
             <a href="{{ route('staff.index') }}">Staff Management</a>
             <a href="{{ route('ward-bed-management.index') }}">Ward and Bed Management</a>
             <a href="{{ url('/module4/appointments') }}" class="nav-link">Appointments and Treatments</a>
-            <a href="#">Billings and Reports</a>
+            <a href="{{ route('billing.index') }}">Billings and Reports</a>
         </nav>
 
         <form method="POST" action="{{ route('logout') }}" class="logout-btn">

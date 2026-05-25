@@ -45,13 +45,25 @@
                     >
                 </div>
 
+                @if ($errors->any())
+                    <div class="alert-error">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+
+                @if (session('status'))
+                    <div class="alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <div class="form-options">
                     <label class="remember">
                         <input type="checkbox" name="remember">
                         Remember me
                     </label>
 
-                    <a href="#">Forgot password?</a>
+                    <a href="{{ route('password.request') }}">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="btn-primary">Sign In</button>

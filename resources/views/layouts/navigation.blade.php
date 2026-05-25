@@ -15,6 +15,40 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @auth
+                        @php $role = auth()->user()->role?->role_name; @endphp
+
+                        @if($role === 'Administrator' || $role === 'Receptionist')
+                            <x-nav-link :href="route('patients.create')" :active="request()->routeIs('patients.*')">
+                                {{ __('Patients') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('module4.appointments')" :active="request()->routeIs('module4.appointments*')">
+                                {{ __('Appointments') }}
+                            </x-nav-link>
+                        @endif
+
+                        @if($role === 'Administrator' || $role === 'Charge Nurse')
+                            <x-nav-link :href="route('medical-records.index')" :active="request()->routeIs('medical-records.*')">
+                                {{ __('Medical Records') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('ward-bed-management.index')" :active="request()->routeIs('ward-bed-management.*')">
+                                {{ __('Ward Management') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admission-tracking.index')" :active="request()->routeIs('admission-tracking.*')">
+                                {{ __('Admissions') }}
+                            </x-nav-link>
+                        @endif
+
+                        @if($role === 'Administrator')
+                            <x-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                                {{ __('Staff') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('billing.index')" :active="request()->routeIs('billing.*') || request()->routeIs('billing.reports')">
+                                {{ __('Billing & Reports') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
                 </div>
             </div>
 
