@@ -9,7 +9,7 @@ class StaffController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
+        $search = $request->input('search');
 
         $staffQuery = DB::table('staff as s')
             ->leftJoin('roles as r', 's.role_id', '=', 'r.role_id')
@@ -284,7 +284,19 @@ class StaffController extends Controller
             ->orderBy('swa.assignment_date', 'desc')
             ->get();
 
-        return view('staff.show', compact('staff', 'qualifications', 'workExperiences', 'wardAssignments'));
+        $staffProfile = DB::select(
+            "SELECT * FROM vw_staff_profile WHERE staff_no = ?",
+            [$staff_no]
+        );
+        $staffProfile = $staffProfile[0] ?? null;
+
+        return view('staff.show', compact(
+            'staff',
+            'qualifications',
+            'workExperiences',
+            'wardAssignments',
+            'staffProfile'
+        ));
     }
 
     public function destroy($staff_no)
@@ -312,6 +324,33 @@ class StaffController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Failed to end assignment: ' . $e->getMessage());
+        }
+    }
+
+    public function transferWard(Request $request)
+    {
+        $request->validate([
+            'staff_no'      => 'required|exists:staff,staff_no',
+            'old_ward_id'   => 'required|exists:wards,ward_id',
+            'new_ward_id'   => 'required|exists:wards,ward_id|different:old_ward_id',
+            'role_in_ward'  => 'nullable|max:100',
+            'transfer_date' => 'required|date',
+        ]);
+
+        try {
+            DB::statement('CALL sp_transfer_staff_ward(?, ?, ?, ?, ?)', [
+                $request->staff_no,
+                (int) $request->old_ward_id,
+                (int) $request->new_ward_id,
+                $request->role_in_ward,
+                $request->transfer_date,
+            ]);
+
+            return redirect()->route('staff.ward-assignment')
+                ->with('success', 'Staff transferred to new ward successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Transfer failed: ' . $e->getMessage());
         }
     }
 

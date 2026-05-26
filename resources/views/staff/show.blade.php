@@ -47,6 +47,30 @@
             </div>
         </div>
 
+        @if($staffProfile && $staffProfile->ward_name)
+        <div class="current-assignment-card" style="padding:18px 20px; border-top:1px solid #e2e8f0; background:#f8fafc;">
+            <h4 class="section-title" style="margin-bottom:12px;">Current Assignment</h4>
+            <div class="info-grid">
+                <div>
+                    <label>Ward</label>
+                    <strong>{{ $staffProfile->ward_name }}</strong>
+                </div>
+                <div>
+                    <label>Role in Ward</label>
+                    <strong>{{ $staffProfile->role_in_ward ?? 'Not set' }}</strong>
+                </div>
+                <div>
+                    <label>Current Shift</label>
+                    <strong>{{ $staffProfile->shift_type ?? 'Not set' }}</strong>
+                </div>
+                <div>
+                    <label>Assigned Since</label>
+                    <strong>{{ $staffProfile->assignment_date ?? 'N/A' }}</strong>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <div class="profile-body">
 
             <div class="section-title">Personal Information</div>
@@ -54,7 +78,7 @@
             <div class="info-grid">
                 <div>
                     <label>Staff No</label>
-                    <strong>{{ $staff->staff_no }}</strong>
+                    <strong>S{{ str_pad($staff->staff_no, 3, '0', STR_PAD_LEFT) }}</strong>
                 </div>
                 <div>
                     <label>Full Name</label>

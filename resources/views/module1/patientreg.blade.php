@@ -156,6 +156,25 @@
         <p>List of registered patients in Module 1</p>
     </div>
 
+    <div class="search-bar-wrapper">
+        <form method="GET" action="{{ route('patients.create') }}" class="search-form">
+            <div class="search-input-group">
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Search by Patient No or Name..." class="search-input">
+                <button type="submit" class="search-btn">Search</button>
+                @if(request('search'))
+                    <a href="{{ route('patients.create') }}" class="clear-btn">Clear</a>
+                @endif
+            </div>
+            @if(request('search'))
+                <p class="search-result-info">
+                    Showing results for: <strong>"{{ request('search') }}"</strong>
+                    — {{ count($patients) }} record(s) found
+                </p>
+            @endif
+        </form>
+    </div>
+
     <table class="records-table">
         <thead>
             <tr>

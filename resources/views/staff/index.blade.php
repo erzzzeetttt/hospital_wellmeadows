@@ -416,7 +416,7 @@
                     <tbody>
                         @forelse($staff as $member)
                             <tr>
-                                <td>{{ $member->staff_no }}</td>
+                                <td>S{{ str_pad($member->staff_no, 3, '0', STR_PAD_LEFT) }}</td>
                                 <td>{{ $member->first_name }} {{ $member->last_name }}</td>
                                 <td>{{ $member->position }}</td>
                                 <td><span class="role-badge">{{ $member->role_name ?? 'N/A' }}</span></td>

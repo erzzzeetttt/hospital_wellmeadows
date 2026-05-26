@@ -152,7 +152,7 @@
                                         $rota = $latestRota->get($member->staff_no . '_' . $member->ward_id);
                                     @endphp
                                     <tr class="{{ $member->role_in_ward === 'Charge Nurse' ? 'charge-nurse-row' : '' }}">
-                                        <td>{{ $member->staff_no }}</td>
+                                        <td>S{{ str_pad($member->staff_no, 3, '0', STR_PAD_LEFT) }}</td>
                                         <td>
                                             <a href="{{ route('staff.show', $member->staff_no) }}"
                                                style="color:#2563eb; text-decoration:none; font-weight:{{ $member->role_in_ward === 'Charge Nurse' ? '700' : '400' }};">
@@ -223,7 +223,7 @@
                     <option value="">Select staff member</option>
                     @foreach($staff as $member)
                         <option value="{{ $member->staff_no }}">
-                            {{ $member->staff_no }} &mdash;
+                            S{{ str_pad($member->staff_no, 3, '0', STR_PAD_LEFT) }} &mdash;
                             {{ $member->first_name }} {{ $member->last_name }}
                             ({{ $member->position }})
                         </option>

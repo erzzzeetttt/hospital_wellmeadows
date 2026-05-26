@@ -8,13 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
-    public function create()
+    public function create(Request $request)
     {
         $doctors = LocalDoctor::all();
 
-        $patients = DB::table('vw_patient_profile')
-            ->orderBy('patient_no', 'desc')
-            ->get();
+        $search = $request->input('search');
+
+        $query = "SELECT * FROM vw_patient_profile WHERE 1=1";
+        $params = [];
+
+        if ($search) {
+            $query .= " AND (
+                LOWER(patient_no) LIKE LOWER(?) OR
+                LOWER(first_name || ' ' || last_name) LIKE LOWER(?) OR
+                LOWER(first_name) LIKE LOWER(?) OR
+                LOWER(last_name) LIKE LOWER(?)
+            )";
+            $searchParam = '%' . $search . '%';
+            $params = [$searchParam, $searchParam, $searchParam, $searchParam];
+        }
+
+        $query .= " ORDER BY patient_no DESC";
+        $patients = DB::select($query, $params);
 
         return view('module1.patientreg', compact('doctors', 'patients'));
     }

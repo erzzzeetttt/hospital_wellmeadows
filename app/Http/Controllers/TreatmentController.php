@@ -22,7 +22,7 @@ class TreatmentController extends Controller
             FROM appointments a
             LEFT JOIN patients p ON a.patient_no = p.patient_no
             LEFT JOIN staff s ON a.staff_no = s.staff_no
-            WHERE a.status IN ('Pending', 'Confirmed', 'Checked In')
+            WHERE a.status IN ('Confirmed', 'Checked In')
             ORDER BY a.appointment_date DESC, a.appointment_time DESC
         ");
 

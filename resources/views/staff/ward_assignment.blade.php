@@ -94,6 +94,16 @@
                             <a href="{{ route('staff.show', $assignment->staff_no) }}" class="secondary-btn">
                                 View Profile
                             </a>
+                            <button
+                                type="button"
+                                class="transfer-btn"
+                                onclick="openTransferModal(
+                                    '{{ $assignment->staff_no }}',
+                                    {{ $assignment->ward_id }},
+                                    '{{ $assignment->first_name }} {{ $assignment->last_name }}'
+                                )">
+                                Transfer Ward
+                            </button>
                             <form method="POST"
                                   action="{{ route('staff.ward-assignment.end', $assignment->assignment_id) }}"
                                   onsubmit="return confirm('Are you sure you want to end this ward assignment?')">
@@ -249,6 +259,79 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("closeAssignModal").addEventListener("click", function () {
         modal.style.display = "none";
     });
+});
+</script>
+
+<!-- Transfer Ward Modal -->
+<div id="transferModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+
+        <div class="modal-header">
+            <h3>Transfer Staff to Another Ward</h3>
+            <button type="button" onclick="closeTransferModal()" class="modal-close">&#x2715;</button>
+        </div>
+
+        <form method="POST" action="{{ route('staff.ward-transfer') }}">
+            @csrf
+            <input type="hidden" name="staff_no" id="transfer_staff_no">
+            <input type="hidden" name="old_ward_id" id="transfer_old_ward_id">
+
+            <div class="form-group" style="margin-bottom:16px;">
+                <label>Staff Member</label>
+                <input type="text" id="transfer_staff_name" readonly
+                       style="width:100%; padding:9px 12px; border:1px solid #e2e8f0; border-radius:6px; background:#f8fafc; font-size:13px; box-sizing:border-box;">
+            </div>
+
+            <div class="form-group" style="margin-bottom:16px;">
+                <label>Transfer to Ward *</label>
+                <select name="new_ward_id" required>
+                    <option value="">Select new ward</option>
+                    @foreach($wards as $ward)
+                        <option value="{{ $ward->ward_id }}">{{ $ward->ward_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:16px;">
+                <label>Role in New Ward</label>
+                <select name="role_in_ward">
+                    <option value="General Assignment">General Assignment</option>
+                    <option value="Charge Nurse">Charge Nurse</option>
+                    <option value="Staff Nurse">Staff Nurse</option>
+                    <option value="Nurse">Nurse</option>
+                    <option value="Doctor">Doctor</option>
+                    <option value="Consultant">Consultant</option>
+                    <option value="Auxiliary">Auxiliary</option>
+                    <option value="Physiotherapist">Physiotherapist</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:16px;">
+                <label>Transfer Date *</label>
+                <input type="date" name="transfer_date" required value="{{ date('Y-m-d') }}">
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" onclick="closeTransferModal()" class="secondary-btn">Cancel</button>
+                <button type="submit" class="primary-btn">Transfer Staff</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+function openTransferModal(staffNo, wardId, staffName) {
+    document.getElementById('transfer_staff_no').value = staffNo;
+    document.getElementById('transfer_old_ward_id').value = wardId;
+    document.getElementById('transfer_staff_name').value = staffName;
+    document.getElementById('transferModal').style.display = 'flex';
+}
+function closeTransferModal() {
+    document.getElementById('transferModal').style.display = 'none';
+}
+document.getElementById('transferModal').addEventListener('click', function (e) {
+    if (e.target === this) closeTransferModal();
 });
 </script>
 

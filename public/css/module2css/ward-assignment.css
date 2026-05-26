@@ -107,6 +107,23 @@
     color: #ffffff;
 }
 
+/* ── TRANSFER WARD BUTTON ────────────────────────────────── */
+.transfer-btn {
+    padding: 6px 14px;
+    background-color: #ffffff;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.transfer-btn:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
 /* ── RESPONSIVE ──────────────────────────────────────────── */
 @media (max-width: 1000px) {
     .tracking-grid { grid-template-columns: 1fr; }
