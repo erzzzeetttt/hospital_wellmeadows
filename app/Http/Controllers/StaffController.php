@@ -7,13 +7,25 @@ use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $staff = DB::table('staff as s')
+        $search = $request->get('search');
+
+        $staffQuery = DB::table('staff as s')
             ->leftJoin('roles as r', 's.role_id', '=', 'r.role_id')
             ->select('s.*', 'r.role_name')
-            ->orderBy('s.staff_no', 'desc')
-            ->get();
+            ->orderBy('s.staff_no', 'desc');
+
+        if ($search) {
+            $staffQuery->where(function ($q) use ($search) {
+                $q->where(DB::raw('CAST(s.staff_no AS TEXT)'), 'LIKE', '%' . $search . '%')
+                  ->orWhere(DB::raw("LOWER(s.first_name || ' ' || s.last_name)"), 'LIKE', '%' . strtolower($search) . '%')
+                  ->orWhere(DB::raw('LOWER(s.first_name)'), 'LIKE', '%' . strtolower($search) . '%')
+                  ->orWhere(DB::raw('LOWER(s.last_name)'), 'LIKE', '%' . strtolower($search) . '%');
+            });
+        }
+
+        $staff = $staffQuery->get();
 
         $roles = DB::table('roles')
             ->whereIn('role_name', ['Administrator', 'Receptionist', 'Charge Nurse'])
@@ -63,7 +75,7 @@ class StaffController extends Controller
 
         try {
             $result = DB::select(
-                "SELECT fn_add_staff(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS new_staff_no",
+                "SELECT fn_add_staff(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS new_staff_no",
                 [
                     (int) $request->role_id,
                     $request->first_name,
@@ -79,7 +91,6 @@ class StaffController extends Controller
                     $request->hours_per_week ? (float) $request->hours_per_week : null,
                     $request->contract_type,
                     $request->payment_type,
-                    $request->date_registered,
                 ]
             );
 
@@ -146,7 +157,7 @@ class StaffController extends Controller
             ->orderBy('date_obtained', 'asc')
             ->get();
 
-        $workExperiences = DB::table('staff_experience')
+        $workExperiences = DB::table('work_experiences')
             ->where('staff_no', $staff_no)
             ->orderBy('start_date', 'asc')
             ->get();
@@ -183,7 +194,7 @@ class StaffController extends Controller
 
         try {
             DB::select(
-                "SELECT fn_update_staff(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS message",
+                "SELECT fn_update_staff(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS message",
                 [
                     $staff_no,
                     (int) $request->role_id,
@@ -200,7 +211,6 @@ class StaffController extends Controller
                     $request->hours_per_week ? (float) $request->hours_per_week : null,
                     $request->contract_type,
                     $request->payment_type,
-                    $request->date_registered,
                 ]
             );
 
@@ -221,7 +231,7 @@ class StaffController extends Controller
             }
 
             // Replace work experience: delete existing then reinsert from form
-            DB::delete("DELETE FROM staff_experience WHERE staff_no = ?", [$staff_no]);
+            DB::delete("DELETE FROM work_experiences WHERE staff_no = ?", [$staff_no]);
             foreach (($request->experiences ?? []) as $exp) {
                 if (!empty($exp['organization_name'])) {
                     DB::select(
@@ -262,7 +272,7 @@ class StaffController extends Controller
             ->orderBy('date_obtained', 'desc')
             ->get();
 
-        $workExperiences = DB::table('staff_experience')
+        $workExperiences = DB::table('work_experiences')
             ->where('staff_no', $staff_no)
             ->orderBy('start_date', 'desc')
             ->get();
@@ -287,6 +297,21 @@ class StaffController extends Controller
             return redirect()->route('staff.index')->with('success', $result[0]->message);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to delete staff: ' . $e->getMessage());
+        }
+    }
+
+    public function endAssignment($assignment_id)
+    {
+        try {
+            DB::select(
+                'SELECT fn_end_staff_assignment(?) AS message',
+                [$assignment_id]
+            );
+            return redirect()->route('staff.ward-assignment')
+                ->with('success', 'Ward assignment ended successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to end assignment: ' . $e->getMessage());
         }
     }
 

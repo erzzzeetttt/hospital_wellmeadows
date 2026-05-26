@@ -89,6 +89,24 @@
     border-radius: 8px;
 }
 
+/* ── END ASSIGNMENT BUTTON ───────────────────────────────── */
+.end-assignment-btn {
+    padding: 6px 14px;
+    background-color: #ffffff;
+    color: #dc2626;
+    border: 1px solid #dc2626;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.end-assignment-btn:hover {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
 /* ── RESPONSIVE ──────────────────────────────────────────── */
 @media (max-width: 1000px) {
     .tracking-grid { grid-template-columns: 1fr; }

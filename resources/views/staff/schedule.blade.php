@@ -52,7 +52,6 @@
                 <h3>{{ $totalStaff }}</h3>
                 <p>All registered staff</p>
             </div>
-            <div class="summary-icon">&#128101;</div>
         </div>
 
         <div class="summary-card">
@@ -61,7 +60,6 @@
                 <h3>{{ $assignedStaff }}</h3>
                 <p>Currently on duty</p>
             </div>
-            <div class="summary-icon green">&#10003;</div>
         </div>
 
         <div class="summary-card">
@@ -70,7 +68,6 @@
                 <h3>{{ $totalStaff - $assignedStaff }}</h3>
                 <p>Available for assignment</p>
             </div>
-            <div class="summary-icon yellow">&#8987;</div>
         </div>
 
         <div class="summary-card">
@@ -79,7 +76,6 @@
                 <h3>{{ $totalWards }}</h3>
                 <p>Operational ward units</p>
             </div>
-            <div class="summary-icon purple">&#127973;</div>
         </div>
 
     </section>

@@ -367,6 +367,32 @@
             </script>
 
             <div class="records-section">
+
+                <div class="search-bar-wrapper">
+                    <form method="GET" action="{{ route('staff.index') }}" class="search-form">
+                        <div class="search-input-group">
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ request('search') }}"
+                                placeholder="Search by Staff No or Name..."
+                                class="search-input"
+                            >
+                            <button type="submit" class="search-btn">Search</button>
+                            @if(request('search'))
+                                <a href="{{ route('staff.index') }}" class="clear-btn">Clear</a>
+                            @endif
+                        </div>
+                        @if(request('search'))
+                            <p class="search-result-info">
+                                Showing results for:
+                                <strong>"{{ request('search') }}"</strong>
+                                — {{ count($staff) }} record(s) found
+                            </p>
+                        @endif
+                    </form>
+                </div>
+
                 <div class="records-title">
                     <div>
                         <h3>Staff Records</h3>

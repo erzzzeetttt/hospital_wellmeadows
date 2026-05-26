@@ -256,7 +256,7 @@
                                 'position'        => $e->position,
                                 'start_date'      => $e->start_date,
                                 'end_date'        => $e->end_date,
-                                'organization_name' => $e->organization_name,
+                                'organization_name' => $e->organization,
                             ];
                         }
                         if (empty($exps)) {

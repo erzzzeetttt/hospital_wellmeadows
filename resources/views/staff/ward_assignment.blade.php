@@ -94,6 +94,14 @@
                             <a href="{{ route('staff.show', $assignment->staff_no) }}" class="secondary-btn">
                                 View Profile
                             </a>
+                            <form method="POST"
+                                  action="{{ route('staff.ward-assignment.end', $assignment->assignment_id) }}"
+                                  onsubmit="return confirm('Are you sure you want to end this ward assignment?')">
+                                @csrf
+                                <button type="submit" class="end-assignment-btn">
+                                    End Assignment
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @empty

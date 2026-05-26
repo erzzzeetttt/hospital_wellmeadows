@@ -94,7 +94,13 @@
                     <div class="admission-info">
                         <div>
                             <label>Ward & Bed</label>
-                            <strong>Not assigned yet</strong>
+                            <strong>
+                                @if($admission->ward_name && $admission->bed_number)
+                                    {{ $admission->ward_name }} - Bed {{ $admission->bed_number }}
+                                @else
+                                    Not assigned yet
+                                @endif
+                            </strong>
                         </div>
 
                         <div>

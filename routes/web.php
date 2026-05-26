@@ -92,6 +92,7 @@ Route::middleware(['auth', 'role:Administrator'])->group(function () {
     Route::delete('/staff/{staff_no}', [StaffController::class, 'destroy'])->name('staff.destroy');
     Route::get('/staff-ward-assignment', [StaffController::class, 'wardAssignment'])->name('staff.ward-assignment');
     Route::post('/staff-ward-assignment', [StaffController::class, 'storeWardAssignment'])->name('staff.ward-assignment.store');
+    Route::post('/staff-ward-assignment/{assignment_id}/end', [StaffController::class, 'endAssignment'])->name('staff.ward-assignment.end');
     Route::get('/staff-schedule', [StaffController::class, 'schedule'])->name('staff.schedule');
     Route::post('/staff-rota', [StaffController::class, 'storeRota'])->name('staff.rota.store');
 });

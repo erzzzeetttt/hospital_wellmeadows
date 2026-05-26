@@ -20,15 +20,26 @@ class AdmissionTrackingController extends Controller
         ->where('status', 'Admitted')
         ->count();
 
-    $activeAdmissions = DB::table('ward_admissions')
-        ->join('patients', 'ward_admissions.patient_no', '=', 'patients.patient_no')
-        ->where('ward_admissions.status', 'Admitted')
+    $activeAdmissions = DB::table('ward_admissions as wa')
+        ->join('patients as p', 'p.patient_no', '=', 'wa.patient_no')
+        ->leftJoin('ward_allocations as wc', function ($join) {
+            $join->on('wc.patient_no', '=', 'wa.patient_no')
+                 ->whereNull('wc.release_date');
+        })
+        ->leftJoin('wards as w', 'w.ward_id', '=', 'wc.ward_id')
+        ->leftJoin('beds as b', 'b.bed_id', '=', 'wc.bed_id')
+        ->where('wa.status', 'Admitted')
         ->select(
-            'ward_admissions.*',
-            'patients.first_name',
-            'patients.last_name'
+            'wa.*',
+            'p.first_name',
+            'p.last_name',
+            'w.ward_name',
+            'b.bed_number',
+            'wc.ward_id',
+            'wc.bed_id',
+            'wc.allocation_date'
         )
-        ->orderBy('ward_admissions.date_admitted', 'desc')
+        ->orderBy('wa.date_admitted', 'desc')
         ->get();
 
     $recentDischarges = DB::table('ward_admissions')

@@ -163,7 +163,7 @@
                 <div class="timeline-item">
                     <div>
                         <h5>{{ $exp->position }}</h5>
-                        <p>{{ $exp->organization_name }}</p>
+                        <p>{{ $exp->organization }}</p>
                     </div>
                     <span>{{ $exp->start_date }} — {{ $exp->end_date ?? 'Present' }}</span>
                 </div>
